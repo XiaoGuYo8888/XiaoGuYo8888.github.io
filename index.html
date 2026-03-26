@@ -755,7 +755,7 @@ function openImageInNewTab(url) {
 async function uploadToCloud(file) {
     return new Promise((resolve) => {
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = (https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com) => {
             // 这里使用本地DataURL作为云端URL，实际项目替换为真实云存储接口
             resolve(e.target.result);
         };
