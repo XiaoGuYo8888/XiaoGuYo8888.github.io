@@ -101,7 +101,7 @@
     </div>
 </div>
 
-<div id="main">
+<div id="main" class="page">
     <div class="top-bar">
         <button onclick="goSettings()">设置</button>
         <button onclick="logout()">退出</button>
@@ -245,23 +245,50 @@ function logout(){
     location.reload();
 }
 
-function show(id){
-    document.querySelectorAll(".page").forEach(p=>p.style.display="none");
-    document.getElementById(id).style.display="flex";
+function hideAllPages() {
+    document.querySelectorAll(".page").forEach(p => p.style.display = "none");
 }
 
 function goMain(){
-    show("main");
+    hideAllPages();
+    document.getElementById("main").style.display = "block";
     loadData();
 }
 
-function goSettings(){show("settingsPage");loadSettings();}
-function goSpace(){show("spacePage");refreshSpace();}
-function goAbout(){show("aboutPage");loadAbout();}
-function goWork(){show("workPage");loadWork();}
-function goContact(){show("contactPage");}
-function editAbout(){show("editAboutPage");loadAboutText();}
-function editWork(){show("editWorkPage");loadWorkText();}
+function goSettings(){
+    hideAllPages();
+    document.getElementById("settingsPage").style.display = "flex";
+    loadSettings();
+}
+function goSpace(){
+    hideAllPages();
+    document.getElementById("spacePage").style.display = "flex";
+    refreshSpace();
+}
+function goAbout(){
+    hideAllPages();
+    document.getElementById("aboutPage").style.display = "flex";
+    loadAbout();
+}
+function goWork(){
+    hideAllPages();
+    document.getElementById("workPage").style.display = "flex";
+    loadWork();
+}
+function goContact(){
+    hideAllPages();
+    document.getElementById("contactPage").style.display = "flex";
+}
+function editAbout(){
+    hideAllPages();
+    document.getElementById("editAboutPage").style.display = "flex";
+    loadAboutText();
+}
+function editWork(){
+    hideAllPages();
+    document.getElementById("editWorkPage").style.display = "flex";
+    loadWorkText();
+}
 
 async function get(k){
     const res = await fetch(API+"?act=get&uid="+uid+"&key="+k);
@@ -279,7 +306,6 @@ async function refreshData(){
     await refreshSpace();
     await loadAbout();
     await loadWork();
-    alert("已从云端同步最新数据");
 }
 
 async function loadData(){
@@ -413,8 +439,10 @@ function deleteItem(){
 window.onload = ()=>{
     refreshCode();
     if(localStorage.getItem("token")===uid){
-        refreshData();
-        goMain();
+        refreshData().then(() => goMain());
+    } else {
+        hideAllPages();
+        document.getElementById("login").style.display = "flex";
     }
 };
 </script>
