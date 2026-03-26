@@ -18,11 +18,10 @@
         #captcha-img{width:100px;height:44px;background:#f5f9fa;border:1px solid #ddd;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer}
         .row{display:flex;align-items:center;margin-bottom:15px;font-size:14px}
         .btn{width:100%;padding:12px;background:#4263eb;color:#fff;border:none;border-radius:6px;font-size:16px;cursor:pointer}
-        .btn:disabled{background:#ccc}
         .link{text-align:center;margin-top:15px;font-size:13px;color:#666}
         .link a{color:#4263eb;cursor:pointer}
 
-        #main,#settingsPage,#spacePage,#aboutPage,#workPage,#contactPage,#editAboutPage,#editWorkPage{display:none}
+        #register,#findPwd,#main,#settingsPage,#spacePage,#about,#work,#contact{display:none}
 
         .setting-item{padding:15px 0;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
         .avatar-preview{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #4263eb}
@@ -39,15 +38,12 @@
         .btn-group-vertical{display:flex;flex-direction:column;gap:14px}
         .btn-rabbit{background:#fff;border:2px solid #333;padding:14px 32px;border-radius:50px;font-size:16px;cursor:pointer;min-width:180px;text-align:center}
         .btn-rabbit:hover{background:#333;color:#fff}
-        .back{margin-bottom:30px}
 
         .space-box{max-width:800px}
-        .space-path{font-size:14px;color:#666;margin-bottom:10px}
         .space-toolbar{display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap}
-        .space-toolbar button{padding:8px 14px;border-radius:6px;border:none;cursor:pointer}
+        .space-toolbar button{padding:8px 14px;border-radius:6px;border:none;cursor-pointer}
         .btn-primary{background:#4263eb;color:#fff}
         .btn-danger{background:#f34144;color:#fff}
-        .btn-light{background:#f1f1f1;color:#333}
 
         .folder-grid,.file-grid{
             display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;margin-bottom:20px;
@@ -64,12 +60,11 @@
             position:absolute;top:20px;right:20px;background:#fff;width:40px;height:40px;
             border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer
         }
-        .preview-img{max-height:80vh;max-width:90vw}
+        .preview-img{max-height:80vh}
 
         .top-bar{position:fixed;top:20px;right:30px;display:flex;gap:10px}
         .top-bar button{background:rgba(0,0,0,0.2);color:#fff;border:1px solid #fff;padding:8px 16px;border-radius:6px;cursor:pointer}
         footer{background:#f8f8f8;padding:30px;text-align:center;color:#888}
-        .edit-area{width:100%;min-height:200px;padding:15px;border:1px solid #ddd;border-radius:8px;margin-bottom:20px}
     </style>
 </head>
 <body>
@@ -79,165 +74,200 @@
     <img id="previewImg" class="preview-img">
 </div>
 
+<!-- 登录 -->
 <div id="login" class="page">
     <div class="box">
         <h2>登录</h2>
         <div class="form-item">
             <label>账号</label>
-            <input type="text" id="user" placeholder="账号">
+            <input type="text" id="user" placeholder="输入账号">
         </div>
         <div class="form-item">
             <label>密码</label>
-            <input type="password" id="pwd" placeholder="密码">
+            <input type="password" id="pwd" placeholder="输入密码">
         </div>
         <div class="form-item">
             <label>验证码</label>
             <div class="captcha-row">
-                <input type="text" id="code" placeholder="验证码">
-                <div id="captcha-img" onclick="refreshCode()"></div>
+                <input type="text" id="loginCaptcha" placeholder="验证码">
+                <div id="captcha-img" onclick="refreshCaptcha()"></div>
             </div>
         </div>
+        <div class="row">
+            <input type="checkbox" id="remember" checked>
+            <label for="remember">记住我</label>
+        </div>
         <button class="btn" onclick="login()">登录</button>
+        <div class="link">
+            <a onclick="showFindPwd()">找回密码</a> |
+            <a onclick="showRegister()">注册</a>
+        </div>
     </div>
 </div>
 
-<div id="main" class="page">
+<!-- 注册 -->
+<div id="register" class="page">
+    <div class="box">
+        <h2>注册</h2>
+        <div class="form-item">
+            <label>账号</label>
+            <input type="text" id="reg_user" placeholder="设置账号">
+        </div>
+        <div class="form-item">
+            <label>密码</label>
+            <input type="password" id="reg_pwd" placeholder="设置密码">
+        </div>
+        <button class="btn" onclick="alert('注册成功！');showLogin()">注册</button>
+        <div class="link"><a onclick="showLogin()">返回登录</a></div>
+    </div>
+</div>
+
+<!-- 找回密码 -->
+<div id="findPwd" class="page">
+    <div class="box">
+        <h2>找回密码</h2>
+        <div class="form-item">
+            <label>账号</label>
+            <input type="text" id="find_user" placeholder="输入账号">
+        </div>
+        <button class="btn" onclick="alert('请联系管理员！');showLogin()">提交</button>
+        <div class="link"><a onclick="showLogin()">返回登录</a></div>
+    </div>
+</div>
+
+<!-- 主界面 -->
+<div id="main">
     <div class="top-bar">
-        <button onclick="goSettings()">设置</button>
+        <button onclick="showSettings()">设置</button>
         <button onclick="logout()">退出</button>
     </div>
 
-    <div class="pages">
+    <div class="pages" id="index_show">
         <div class="container">
             <div class="row home">
                 <div class="left">
-                    <img class="img-responsive" id="bgImage">
+                    <img class="img-responsive" id="mainBg">
                 </div>
                 <div class="right">
                     <div class="logo">
-                        <img id="avatar">
-                        <h4 id="nickname">XiaoGuYo</h4>
+                        <img id="logoAvatar">
+                        <h4 id="logoName">XiaoGuYo</h4>
                     </div>
-                    <p class="home-description" id="sign"></p>
+                    <p class="home-description" id="logoSign">热爱生活</p>
                     <div class="btn-group-vertical">
-                        <div class="btn-rabbit" onclick="goAbout()">关于</div>
-                        <div class="btn-rabbit" onclick="goWork()">经历</div>
-                        <div class="btn-rabbit" onclick="goSpace()">空间</div>
-                        <div class="btn-rabbit" onclick="goContact()">联系</div>
+                        <div class="btn-rabbit" onclick="showAbout()">关于</div>
+                        <div class="btn-rabbit" onclick="showWork()">工作</div>
+                        <div class="btn-rabbit" onclick="showSpace()">空间</div>
+                        <div class="btn-rabbit" onclick="showContact()">联系</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div id="settingsPage" class="page">
-    <div class="box">
-        <h2>云端设置</h2>
-        <div class="setting-item">
-            <span>头像</span>
-            <img id="setAvatar" class="avatar-preview">
+    <div id="about" class="pages" style="display:none;">
+        <div class="container">
+            <div style="text-align:center;">
+                <h1>关于我</h1>
+                <p id="aboutText" style="margin:20px 0;"></p>
+                <button class="btn" style="width:200px;" onclick="showMain()">返回</button>
+            </div>
         </div>
-        <div class="setting-item">
-            <span>昵称</span>
-            <input type="text" id="setNick" style="width:160px">
+    </div>
+
+    <div id="work" class="pages" style="display:none;">
+        <div class="container">
+            <div style="text-align:center;">
+                <h1>我的经历</h1>
+                <p id="workText" style="margin:20px 0;"></p>
+                <button class="btn" style="width:200px;" onclick="showMain()">返回</button>
+            </div>
         </div>
-        <div class="setting-item">
-            <span>签名</span>
-            <input type="text" id="setSign" style="width:160px">
+    </div>
+
+    <div id="contact" class="pages" style="display:none;">
+        <div class="container">
+            <div style="text-align:center;">
+                <h1>联系我</h1>
+                <p style="margin:20px 0;">QQ：78190368</p>
+                <button class="btn" style="width:200px;" onclick="showMain()">返回</button>
+            </div>
         </div>
-        <button class="btn" onclick="saveSettings()">保存到云端</button>
-        <button class="btn" style="background:#666;margin-top:10px" onclick="refreshData()">刷新数据</button>
-        <button class="btn" style="background:#666;margin-top:10px" onclick="goMain()">返回主页</button>
     </div>
-</div>
 
-<div id="spacePage" class="page">
-    <div class="box space-box">
-        <h2>云端空间</h2>
-        <div class="space-path" id="spacePath">首页</div>
-        <div class="space-toolbar">
-            <button class="btn-primary" onclick="createFolder()">新建文件夹</button>
-            <button class="btn-primary" onclick="uploadFile()">上传文件</button>
-            <button class="btn-danger" onclick="deleteItem()">删除</button>
-            <button class="btn-light" onclick="refreshSpace()">刷新</button>
+    <div id="spacePage" class="page">
+        <div class="box space-box">
+            <h2>云端空间</h2>
+            <div class="space-toolbar">
+                <button class="btn-primary" onclick="createFolder()">新建文件夹</button>
+                <button class="btn-primary" onclick="uploadFile()">上传文件</button>
+                <button class="btn-danger" onclick="deleteItem()">删除</button>
+            </div>
+            <div id="folderGrid" class="folder-grid"></div>
+            <div id="fileGrid" class="file-grid"></div>
+            <input type="file" id="fileInput" style="display:none;">
+            <button class="btn" style="margin-top:10px" onclick="showMain()">返回主页</button>
         </div>
-        <div id="folderGrid" class="folder-grid"></div>
-        <div id="fileGrid" class="file-grid"></div>
-        <input type="file" id="fileInput" style="display:none">
-        <button class="btn" style="background:#666;margin-top:10px" onclick="goMain()">返回</button>
     </div>
-</div>
 
-<div id="aboutPage" class="page">
-    <div class="box">
-        <h2>关于我</h2>
-        <div id="aboutContent"></div>
-        <button class="btn" onclick="editAbout()">编辑</button>
-        <button class="btn" style="background:#666" onclick="goMain()">返回</button>
+    <div id="settingsPage" class="page">
+        <div class="box">
+            <h2>设置</h2>
+            <div class="setting-item">
+                <span>昵称</span>
+                <input type="text" id="setNick" style="width:150px">
+            </div>
+            <div class="setting-item">
+                <span>签名</span>
+                <input type="text" id="setSign" style="width:150px">
+            </div>
+            <button class="btn" onclick="saveSettings()">保存到云端</button>
+            <button class="btn" style="background:#666;margin-top:10px" onclick="showMain()">返回</button>
+        </div>
     </div>
-</div>
 
-<div id="workPage" class="page">
-    <div class="box">
-        <h2>我的经历</h2>
-        <div id="workContent"></div>
-        <button class="btn" onclick="editWork()">编辑</button>
-        <button class="btn" style="background:#666" onclick="goMain()">返回</button>
-    </div>
+    <footer>© 2026 XiaoGuYo</footer>
 </div>
-
-<div id="contactPage" class="page">
-    <div class="box">
-        <h2>联系我</h2>
-        <p style="text-align:center;margin:20px 0">QQ：78190368</p>
-        <button class="btn" style="background:#666" onclick="goMain()">返回</button>
-    </div>
-</div>
-
-<div id="editAboutPage" class="page">
-    <div class="box">
-        <h2>编辑关于我</h2>
-        <textarea id="aboutText" class="edit-area"></textarea>
-        <button class="btn" onclick="saveAbout()">保存到云端</button>
-        <button class="btn" style="background:#666" onclick="goAbout()">返回</button>
-    </div>
-</div>
-
-<div id="editWorkPage" class="page">
-    <div class="box">
-        <h2>编辑我的经历</h2>
-        <textarea id="workText" class="edit-area"></textarea>
-        <button class="btn" onclick="saveWork()">保存到云端</button>
-        <button class="btn" style="background:#666" onclick="goWork()">返回</button>
-    </div>
-</div>
-
-<footer>© 2026 XiaoGuYo - 云端个人网站</footer>
 
 <script>
 const API = "https://api.js123.cc/xdaima";
-const uid = "XiaoGuYo8888";
+const UID = "XiaoGuYo8888";
 let code = "";
 let folders = [];
 let files = [];
 
-function refreshCode(){
+// 验证码
+function refreshCaptcha(){
     code = Math.random().toString(36).slice(2,6).toUpperCase();
     document.getElementById("captcha-img").innerText = code;
 }
 
-async function login(){
-    const user = document.getElementById("user").value;
-    const pwd = document.getElementById("pwd").value;
-    const c = document.getElementById("code").value.toUpperCase();
-    if(!user||!pwd||!c)return alert("请填写完整");
-    if(c!==code)return alert("验证码错误");
-    if(user!=="78190368"||pwd!=="mawei1@.")return alert("账号密码错误");
+// 页面切换
+function hideAll(){
+    document.querySelectorAll(".page,.pages").forEach(p=>p.style.display="none");
+}
+function showLogin(){hideAll();document.getElementById("login").style.display="flex";}
+function showRegister(){hideAll();document.getElementById("register").style.display="flex";}
+function showFindPwd(){hideAll();document.getElementById("findPwd").style.display="flex";}
+function showMain(){hideAll();document.getElementById("main").style.display="block";document.getElementById("index_show").style.display="flex";}
+function showSettings(){hideAll();document.getElementById("settingsPage").style.display="flex";}
+function showSpace(){hideAll();document.getElementById("spacePage").style.display="flex";refreshSpace();}
+function showAbout(){hideAll();document.getElementById("about").style.display="flex";loadAbout();}
+function showWork(){hideAll();document.getElementById("work").style.display="flex";loadWork();}
+function showContact(){hideAll();document.getElementById("contact").style.display="flex";}
 
-    localStorage.setItem("token",uid);
+// 登录
+async function login(){
+    const u = document.getElementById("user").value;
+    const p = document.getElementById("pwd").value;
+    const c = document.getElementById("loginCaptcha").value.toUpperCase();
+    if(!u||!p||!c)return alert("请填写完整");
+    if(c!==code)return alert("验证码错误");
+    if(u!=="78190368" || p!=="mawei1@.")return alert("账号或密码错误");
+
+    localStorage.setItem("login","ok");
     await refreshData();
-    goMain();
+    showMain();
 }
 
 function logout(){
@@ -245,158 +275,63 @@ function logout(){
     location.reload();
 }
 
-function hideAllPages() {
-    document.querySelectorAll(".page").forEach(p => p.style.display = "none");
-}
-
-function goMain(){
-    hideAllPages();
-    document.getElementById("main").style.display = "block";
-    loadData();
-}
-
-function goSettings(){
-    hideAllPages();
-    document.getElementById("settingsPage").style.display = "flex";
-    loadSettings();
-}
-function goSpace(){
-    hideAllPages();
-    document.getElementById("spacePage").style.display = "flex";
-    refreshSpace();
-}
-function goAbout(){
-    hideAllPages();
-    document.getElementById("aboutPage").style.display = "flex";
-    loadAbout();
-}
-function goWork(){
-    hideAllPages();
-    document.getElementById("workPage").style.display = "flex";
-    loadWork();
-}
-function goContact(){
-    hideAllPages();
-    document.getElementById("contactPage").style.display = "flex";
-}
-function editAbout(){
-    hideAllPages();
-    document.getElementById("editAboutPage").style.display = "flex";
-    loadAboutText();
-}
-function editWork(){
-    hideAllPages();
-    document.getElementById("editWorkPage").style.display = "flex";
-    loadWorkText();
-}
-
-async function get(k){
-    const res = await fetch(API+"?act=get&uid="+uid+"&key="+k);
+// 云端
+async function get(key){
+    const res = await fetch(API+"?act=get&uid="+UID+"&key="+key);
     const d = await res.json();
-    return d.data||"";
+    return d.data || "";
 }
-
-async function set(k,v){
-    await fetch(API+"?act=set&uid="+uid+"&key="+k+"&val="+encodeURIComponent(v));
+async function set(key,val){
+    await fetch(API+"?act=set&uid="+UID+"&key="+key+"&val="+encodeURIComponent(val));
 }
 
 async function refreshData(){
-    await loadData();
-    await loadSettings();
-    await refreshSpace();
-    await loadAbout();
-    await loadWork();
-}
-
-async function loadData(){
-    const avatar = await get("avatar")||"https://picsum.photos/id/64/200/200";
-    const nick = await get("nick")||"XiaoGuYo";
-    const sign = await get("sign")||"热爱生活";
-    const bg = await get("bg")||"https://picsum.photos/id/1042/800/600";
-    document.getElementById("avatar").src = avatar;
-    document.getElementById("nickname").innerText = nick;
-    document.getElementById("sign").innerText = sign;
-    document.getElementById("bgImage").src = bg;
-}
-
-function loadSettings(){
-    document.getElementById("setAvatar").src = document.getElementById("avatar").src;
-    document.getElementById("setNick").value = document.getElementById("nickname").innerText;
-    document.getElementById("setSign").value = document.getElementById("sign").innerText;
+    const nick = await get("nick") || "XiaoGuYo";
+    const sign = await get("sign") || "热爱生活";
+    document.getElementById("logoName").innerText = nick;
+    document.getElementById("logoSign").innerText = sign;
+    document.getElementById("setNick").value = nick;
+    document.getElementById("setSign").value = sign;
 }
 
 async function saveSettings(){
-    const nick = document.getElementById("setNick").value;
-    const sign = document.getElementById("setSign").value;
-    await set("nick",nick);
-    await set("sign",sign);
-    alert("已保存到云端");
+    await set("nick",document.getElementById("setNick").value);
+    await set("sign",document.getElementById("setSign").value);
+    alert("保存成功");
     refreshData();
-    goMain();
+    showMain();
 }
 
 async function loadAbout(){
-    const t = await get("about")||"这个人很懒，什么都没留下~";
-    document.getElementById("aboutContent").innerText = t;
+    document.getElementById("aboutText").innerText = await get("about") || "我是XiaoGuYo，热爱生活";
 }
-
-async function loadAboutText(){
-    document.getElementById("aboutText").value = await get("about");
-}
-
-async function saveAbout(){
-    await set("about",document.getElementById("aboutText").value);
-    alert("已保存到云端");
-    goAbout();
-}
-
 async function loadWork(){
-    const t = await get("work")||"暂无经历";
-    document.getElementById("workContent").innerText = t;
+    document.getElementById("workText").innerText = await get("work") || "专注学习，认真生活";
 }
 
-async function loadWorkText(){
-    document.getElementById("workText").value = await get("work");
-}
-
-async function saveWork(){
-    await set("work",document.getElementById("workText").value);
-    alert("已保存到云端");
-    goWork();
-}
-
+// 空间
 async function refreshSpace(){
-    const f = await get("folders");
-    const s = await get("files");
-    folders = f?JSON.parse(f):[];
-    files = s?JSON.parse(s):[];
-    renderSpace();
-}
-
-function renderSpace(){
+    folders = JSON.parse(await get("folders")||"[]");
+    files = JSON.parse(await get("files")||"[]");
     const fg = document.getElementById("folderGrid");
     const fi = document.getElementById("fileGrid");
-    fg.innerHTML = "";
-    fi.innerHTML = "";
-    folders.forEach(i=>{
+    fg.innerHTML = fi.innerHTML = "";
+    folders.forEach(f=>{
         const div = document.createElement("div");
         div.className = "folder-item";
-        div.innerText = "📁 "+i.name;
-        div.onclick = ()=>openFolder(i.id);
+        div.innerText = "📁 "+f.name;
         fg.appendChild(div);
     });
-    files.forEach(i=>{
+    files.forEach(f=>{
         const div = document.createElement("div");
         div.className = "file-item";
-        div.innerHTML = `<img src="${i.url}"><br>${i.name}`;
-        div.onclick = ()=>openPreview(i.url);
+        div.innerHTML = `<img src="${f.url}"><br>${f.name}`;
+        div.onclick = ()=>{
+            document.getElementById("previewImg").src = f.url;
+            document.getElementById("previewModal").style.display = "flex";
+        };
         fi.appendChild(div);
     });
-}
-
-function openPreview(u){
-    document.getElementById("previewImg").src = u;
-    document.getElementById("previewModal").style.display = "flex";
 }
 
 function closePreview(){
@@ -404,9 +339,9 @@ function closePreview(){
 }
 
 function createFolder(){
-    const n = prompt("文件夹名");
-    if(!n)return;
-    folders.push({id:Date.now(),name:n});
+    const name = prompt("文件夹名");
+    if(!name)return;
+    folders.push({id:Date.now(),name});
     set("folders",JSON.stringify(folders));
     refreshSpace();
 }
@@ -436,13 +371,12 @@ function deleteItem(){
     refreshSpace();
 }
 
-window.onload = ()=>{
-    refreshCode();
-    if(localStorage.getItem("token")===uid){
-        refreshData().then(() => goMain());
-    } else {
-        hideAllPages();
-        document.getElementById("login").style.display = "flex";
+window.onload = function(){
+    refreshCaptcha();
+    if(localStorage.getItem("login")==="ok"){
+        refreshData().then(()=>showMain());
+    }else{
+        showLogin();
     }
 };
 </script>
