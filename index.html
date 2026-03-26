@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XIAOGUYO - Jag-8</title>
+    <title>XIAOGUYO</title>
     <style>
         * {
             margin: 0;
@@ -291,7 +291,7 @@
             font-size: 16px;
         }
 
-        /* ==================== 空间功能样式 ==================== */
+        /* 空间功能样式 */
         .space-container {
             width: 100%;
             max-width: 1000px;
@@ -316,30 +316,53 @@
         .space-btn.danger {
             background: #f34144;
         }
-        .folder-tree {
+        .folder-path {
             background: #f7f8fa;
-            padding: 15px;
+            padding: 10px 15px;
             border-radius: 10px;
             margin-bottom: 20px;
-        }
-        .folder-item {
-            padding: 8px 12px;
-            margin: 4px 0;
-            border-radius: 6px;
-            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
-        .folder-item:hover {
+        .path-item {
+            padding: 4px 8px;
             background: #eef1f5;
+            border-radius: 4px;
+            cursor: pointer;
         }
-        .folder-item.active {
+        .path-item:hover {
             background: #4263eb;
             color: white;
         }
-        .folder-child {
-            margin-left: 24px;
+        .folder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .folder-card {
+            border: 2px solid #eef1f5;
+            border-radius: 10px;
+            padding: 12px;
+            background: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .folder-card:hover {
+            border-color: #4263eb;
+            background: #f0f4ff;
+        }
+        .folder-icon {
+            font-size: 36px;
+            margin-bottom: 6px;
+        }
+        .folder-name {
+            font-size: 13px;
+            word-break: break-all;
         }
         .file-grid {
             display: grid;
@@ -349,7 +372,7 @@
         .file-card {
             border: 2px solid transparent;
             border-radius: 10px;
-            padding: 12px;
+            padding: 8px;
             background: white;
             box-shadow: 0 2px 6px rgba(0,0,0,0.08);
             text-align: center;
@@ -359,8 +382,11 @@
             border-color: #4263eb;
             background: #f0f4ff;
         }
-        .file-icon {
-            font-size: 36px;
+        .file-thumb {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
             margin-bottom: 6px;
         }
         .file-name {
@@ -387,8 +413,14 @@
         }
         .preview-img {
             max-width: 100%;
+            max-height: 80vh;
             cursor: zoom-in;
             transition: transform 0.2s;
+        }
+        .preview-video {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
         }
         .close-preview {
             position: absolute;
@@ -404,7 +436,51 @@
         .hidden {
             display: none;
         }
-        /* ==================== 空间功能样式结束 ==================== */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            margin: 4px 0 10px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background: #4263eb;
+            width: 0%;
+            transition: width 0.2s;
+        }
+        .move-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9998;
+        }
+        .move-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .move-folder {
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 4px 0;
+        }
+        .move-folder:hover {
+            background: #eef1f5;
+        }
+        .move-active {
+            background: #4263eb;
+            color: white;
+        }
 
         @media (max-width:768px){
             .row.home{
@@ -597,25 +673,27 @@
     </div>
 </div>
 
-<!-- ==================== 新增：空间页面 ==================== -->
+<!-- 空间页面 -->
 <div id="spacePage" class="pages section">
     <div class="container main">
-        <div class="space-container">
-            <div class="btn-rabbit back" onclick="showIndex()">返回主页</div>
-            <div id="watermark">
-                <h2 class="page-title">我的空间</h2>
-                <div class="marker">X</div>
-            </div>
-            <div class="space-toolbar">
-                <button class="space-btn" id="newFolderBtn">新建文件夹</button>
-                <button class="space-btn" id="uploadBtn">上传文件/照片</button>
-                <button class="space-btn" id="selectAllBtn">全选/反选</button>
-                <button class="space-btn danger" id="deleteBtn">删除选中</button>
-                <button class="space-btn" id="downloadBtn">下载选中</button>
-            </div>
-            <div class="folder-tree" id="folderTree"></div>
-            <div class="file-grid" id="fileGrid"></div>
+        <div class="btn-rabbit back" onclick="showIndex()">返回主页</div>
+        <div id="watermark">
+            <h2 class="page-title">我的空间</h2>
+            <div class="marker">X</div>
         </div>
+        <div class="space-toolbar">
+            <button class="space-btn" id="newFolderBtn">新建文件夹</button>
+            <button class="space-btn" id="renameBtn">重命名</button>
+            <button class="space-btn" id="moveBtn">移动到</button>
+            <button class="space-btn" id="uploadBtn">上传文件/照片</button>
+            <button class="space-btn" id="selectAllBtn">全选/反选</button>
+            <button class="space-btn danger" id="deleteBtn">删除选中</button>
+            <button class="space-btn" id="downloadBtn">下载选中</button>
+        </div>
+        <div class="progress-bar"><div class="progress" id="uploadProgress"></div></div>
+        <div class="folder-path" id="folderPath"></div>
+        <div class="folder-grid" id="folderGrid"></div>
+        <div class="file-grid" id="fileGrid"></div>
     </div>
 </div>
 
@@ -716,35 +794,113 @@
     <button class="close-preview" id="closePreview">×</button>
     <div class="preview-content" id="previewContent"></div>
 </div>
-<input type="file" id="fileUploadInput" class="hidden" multiple>
 
+<!-- 移动文件弹窗 -->
+<div class="move-modal" id="moveModal">
+    <div class="move-box">
+        <h3 style="margin-bottom:15px">移动到...</h3>
+        <div id="moveFolderList"></div>
+        <div style="display:flex;gap:10px;margin-top:20px">
+            <button class="btn" style="flex:1" onclick="doMove()">确认移动</button>
+            <button class="btn" style="flex:1;background:#6c757d" onclick="closeMove()">取消</button>
+        </div>
+    </div>
+</div>
+
+<input type="file" id="fileUploadInput" class="hidden" multiple>
 <script>
 let currentCaptcha = "";
 let tempAvatar = "";
 let tempBg = "";
 let smsSent = false;
 
-// ==================== 空间全局变量 ====================
-let folders = JSON.parse(localStorage.getItem("userFolders")) || [{id:"root",name:"根目录",parent:null}];
-let files = JSON.parse(localStorage.getItem("userFiles")) || [];
-let currentFolder = localStorage.getItem("currentFolder") || "root";
-let selectedFiles = [];
+const DB_NAME = "XIAOGUYO_DB";
+const DB_VERSION = 1;
+let db;
+
+let currentFolderId = "root";
+let folderPath = [{id: "root", name: "根目录"}];
+let selectedItems = [];
+let folders = [];
+let files = [];
+let targetMoveFolderId = null;
+
+function openDB() {
+    return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = e => {
+            db = e.target.result;
+            if(!db.objectStoreNames.contains("userData")) db.createObjectStore("userData",{keyPath:"key"});
+            if(!db.objectStoreNames.contains("folders")) db.createObjectStore("folders",{keyPath:"id"});
+            if(!db.objectStoreNames.contains("files")) db.createObjectStore("files",{keyPath:"id"});
+        };
+        req.onsuccess = e => {db=e.target.result;resolve(db);};
+        req.onerror = e=>reject(e.target.error);
+    });
+}
+function saveData(store, data){
+    return new Promise((r,j)=>{
+        const t = db.transaction(store,"readwrite");
+        const req = t.objectStore(store).put(data);
+        req.onsuccess=()=>r();req.onerror=e=>j(e.error);
+    });
+}
+function getData(store, key){
+    return new Promise((r,j)=>{
+        const t=db.transaction(store,"readonly");
+        const req=key?t.objectStore(store).get(key):t.objectStore(store).getAll();
+        req.onsuccess=()=>r(req.result);req.onerror=e=>j(e.error);
+    });
+}
+function deleteData(store, key){
+    return new Promise((r,j)=>{
+        const t=db.transaction(store,"readwrite");
+        const req=t.objectStore(store).delete(key);
+        req.onsuccess=()=>r();req.onerror=e=>j(e.error);
+    });
+}
+async function initDefaultData(){
+    const u=await getData("userData","userInfo");
+    if(!u){
+        await saveData("userData",{
+            key:"userInfo",
+            avatar:"https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/6f4f0b508d724218b8ff380dde479127.jpg",
+            nickname:"XIAOGUYO",
+            sign:"热爱生活 | 专注学习",
+            bg:"https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/bf5efc911434a158a6cb3a9aaf14967.jpg",
+            about:"我是一名热爱生活、热爱记录的普通人。\n保持热爱，慢慢变好。",
+            work:"专注于自己喜欢的事情，一步一个脚印。\n保持学习，保持成长。\n未来可期，继续前行。"
+        });
+    }
+    const root=await getData("folders","root");
+    if(!root) await saveData("folders",{id:"root",name:"根目录",parent:null,time:Date.now()});
+}
+async function loadAllData(){
+    folders=await getData("folders");
+    files=await getData("files");
+    const u=await getData("userData","userInfo");
+    if(u){
+        document.getElementById("logoAvatar").src=u.avatar;
+        document.getElementById("logoName").innerText=u.nickname;
+        document.getElementById("logoSign").innerText=u.sign;
+        document.getElementById("mainBg").src=u.bg;
+        document.getElementById("aboutBg").src=u.bg;
+        document.getElementById("workBg").src=u.bg;
+        document.getElementById("contactBg").src=u.bg;
+    }
+}
 
 function genCode(){
-    const s = "ABCDEFGHJKLMNPQRSTWXYZ23456789";
-    let c = "";
-    for(let i=0;i<4;i++)c+=s[Math.floor(Math.random()*s.length)];
-    return c;
+    const s="ABCDEFGHJKLMNPQRSTWXYZ23456789";let c="";
+    for(let i=0;i<4;i++)c+=s[Math.floor(Math.random()*s.length)];return c;
 }
 function refreshCaptcha(){currentCaptcha=genCode();document.getElementById("captcha-img").innerText=currentCaptcha;}
 function refreshRegCaptcha(){document.getElementById("reg-captcha-img").innerText=genCode();}
 function refreshFindCaptcha(){document.getElementById("find-captcha-img").innerText=genCode();}
 function refreshCpCaptcha(){document.getElementById("cp-captcha-img").innerText=genCode();}
-
 function sendSms(){
-    let phone=document.getElementById("reg_phone").value.trim();
-    if(!phone){alert("请输入手机号");return;}
-    smsSent=true;alert("验证码：1234");
+    let p=document.getElementById("reg_phone").value.trim();
+    if(!p){alert("请输入手机号");return;}smsSent=true;alert("验证码：1234");
 }
 
 function hideAll(){document.querySelectorAll(".page").forEach(e=>e.style.display="none");}
@@ -752,82 +908,76 @@ function showLogin(){hideAll();document.getElementById("login").style.display="f
 function showRegister(){hideAll();document.getElementById("register").style.display="flex";document.getElementById("main").style.display="none";}
 function showFindPwd(){hideAll();document.getElementById("findPwd").style.display="flex";document.getElementById("main").style.display="none";}
 function showChangePwd(){hideAll();document.getElementById("changePwd").style.display="flex";document.getElementById("main").style.display="none";}
-function showMain(){hideAll();document.getElementById("main").style.display="block";showIndex();loadAll();syncBg();}
+async function showMain(){
+    hideAll();document.getElementById("main").style.display="block";showIndex();await loadAllData();
+}
 function showSettings(){hideAll();document.getElementById("settingsPage").style.display="flex";}
 function showBgPage(){hideAll();document.getElementById("bgPage").style.display="flex";}
-
-// 新增：打开空间
-function showSpace(){
-    hideAll();
-    document.getElementById("main").style.display="block";
+async function showSpace(){
+    hideAll();document.getElementById("main").style.display="block";
     document.querySelectorAll(".section").forEach(s=>s.style.display="none");
     document.getElementById("spacePage").style.display="flex";
-    renderFolderTree();
-    renderFiles();
+    await loadAllData();renderFolderPath();renderFolders();renderFiles();
 }
-
 function showIndex(){document.querySelectorAll(".section").forEach(s=>s.style.display="none");document.getElementById("index_show").style.display="flex";}
-function showAbout(){hideAll();document.getElementById("main").style.display="block";document.querySelectorAll(".section").forEach(s=>s.style.display="none");document.getElementById("about").style.display="flex";renderAbout();}
-function showWork(){hideAll();document.getElementById("main").style.display="block";document.querySelectorAll(".section").forEach(s=>s.style.display="none");document.getElementById("work").style.display="flex";renderWork();}
+async function showAbout(){
+    hideAll();document.getElementById("main").style.display="block";
+    document.querySelectorAll(".section").forEach(s=>s.style.display="none");
+    document.getElementById("about").style.display="flex";
+    const u=await getData("userData","userInfo");
+    document.getElementById("showAboutContent").innerHTML=
+        (u?.about||"").split("\n").map(t=>t?`<p class="info">${t}</p>`:"").join("");
+}
+async function showWork(){
+    hideAll();document.getElementById("main").style.display="block";
+    document.querySelectorAll(".section").forEach(s=>s.style.display="none");
+    document.getElementById("work").style.display="flex";
+    const u=await getData("userData","userInfo");
+    document.getElementById("showWorkContent").innerHTML=
+        (u?.work||"").split("\n").map(t=>t?`<p class="info">${t}</p>`:"").join("");
+}
 function showContact(){hideAll();document.getElementById("main").style.display="block";document.querySelectorAll(".section").forEach(s=>s.style.display="none");document.getElementById("contact").style.display="flex";}
-
-function openEditAbout(){hideAll();document.getElementById("editAbout").style.display="flex";document.getElementById("aboutText").value=localStorage.getItem("aboutContent")||"我是一名热爱生活、热爱记录的普通人。\n保持热爱，慢慢变好。";}
-function openEditWork(){hideAll();document.getElementById("editWork").style.display="flex";document.getElementById("workText").value=localStorage.getItem("workContent")||"专注于自己喜欢的事情，一步一个脚印。\n保持学习，保持成长。\n未来可期，继续前行。";}
-
+async function openEditAbout(){
+    hideAll();document.getElementById("editAbout").style.display="flex";
+    const u=await getData("userData","userInfo");
+    document.getElementById("aboutText").value=u?.about||"";
+}
+async function openEditWork(){
+    hideAll();document.getElementById("editWork").style.display="flex";
+    const u=await getData("userData","userInfo");
+    document.getElementById("workText").value=u?.work||"";
+}
 function chooseAvatar(){document.getElementById("avatarInput").click();}
-function syncBg(){
-    let bg=localStorage.getItem("userBg")||"https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/bf5efc911434a158a6cb3a9aaf14967.jpg";
-    document.getElementById("mainBg").src=bg;
-    document.getElementById("aboutBg").src=bg;
-    document.getElementById("workBg").src=bg;
-    document.getElementById("contactBg").src=bg;
-}
-function loadAll(){
-    let avatar=localStorage.getItem("userAvatar")||"https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/6f4f0b508d724218b8ff380dde479127.jpg";
-    let name=localStorage.getItem("userNickname")||"XIAOGUYO";
-    let sign=localStorage.getItem("userSign")||"热爱生活 | 专注学习";
-    document.getElementById("logoAvatar").src=avatar;
-    document.getElementById("logoName").innerText=name;
-    document.getElementById("logoSign").innerText=sign;
-}
-
-function saveSettings(){
-    let name=document.getElementById("setNickname").value.trim();
-    let sign=document.getElementById("setSign").value.trim();
-    if(name)localStorage.setItem("userNickname",name);
-    if(sign)localStorage.setItem("userSign",sign);
-    if(tempAvatar)localStorage.setItem("userAvatar",tempAvatar);
+async function saveSettings(){
+    const u=await getData("userData","userInfo")||{key:"userInfo"};
+    u.nickname=document.getElementById("setNickname").value.trim()||u.nickname;
+    u.sign=document.getElementById("setSign").value.trim()||u.sign;
+    if(tempAvatar)u.avatar=tempAvatar;await saveData("userData",u);
     alert("保存成功");showMain();
 }
-function saveBg(){
-    if(tempBg)localStorage.setItem("userBg",tempBg);
+async function saveBg(){
+    const u=await getData("userData","userInfo")||{key:"userInfo"};
+    if(tempBg)u.bg=tempBg;await saveData("userData",u);
     alert("背景保存成功");showMain();
 }
-function saveAbout(){
-    localStorage.setItem("aboutContent",document.getElementById("aboutText").value);
+async function saveAbout(){
+    const u=await getData("userData","userInfo")||{key:"userInfo"};
+    u.about=document.getElementById("aboutText").value;await saveData("userData",u);
     alert("保存成功");showAbout();
 }
-function saveWork(){
-    localStorage.setItem("workContent",document.getElementById("workText").value);
+async function saveWork(){
+    const u=await getData("userData","userInfo")||{key:"userInfo"};
+    u.work=document.getElementById("workText").value;await saveData("userData",u);
     alert("保存成功");showWork();
 }
-
-function renderAbout(){
-    let c=localStorage.getItem("aboutContent")||"我是一名热爱生活、热爱记录的普通人。\n保持热爱，慢慢变好。";
-    document.getElementById("showAboutContent").innerHTML=c.split("\n").map(t=>t.trim()?`<p class="info">${t}</p>`:"").join("");
+async function clearAllData(){
+    if(!confirm("确定清空所有数据？头像、背景、空间文件将全部删除"))return;
+    const t=db.transaction(["userData","folders","files"],"readwrite");
+    await t.objectStore("userData").clear();
+    await t.objectStore("folders").clear();
+    await t.objectStore("files").clear();
+    alert("已清空所有数据");location.reload();
 }
-function renderWork(){
-    let c=localStorage.getItem("workContent")||"专注于自己喜欢的事情，一步一个脚印。\n保持学习，保持成长。\n未来可期，继续前行。";
-    document.getElementById("showWorkContent").innerHTML=c.split("\n").map(t=>t.trim()?`<p class="info">${t}</p>`:"").join("");
-}
-
-function clearAllData(){
-    if(!confirm("确定清空所有数据？空间文件也会删除"))return;
-    localStorage.clear();
-    alert("已清空");
-    location.reload();
-}
-
 function login(){
     let u=document.getElementById("user").value.trim();
     let p=document.getElementById("pwd").value.trim();
@@ -835,201 +985,175 @@ function login(){
     if(!u||!p||!c){alert("请填写完整");return;}
     if(c!==currentCaptcha){alert("验证码错误");refreshCaptcha();return;}
     if(u==="78190368"&&p==="dashan1@."){
-        if(document.getElementById("remember").checked)localStorage.setItem("loginStatus","ok");
-        showMain();
-    }else{
-        alert("账号或密码错误");
-    }
+        localStorage.setItem("loginStatus","ok");showMain();
+    }else{alert("账号或密码错误");}
 }
 function register(){alert("注册成功！");showLogin();}
 function findPassword(){alert("请联系管理员");showLogin();}
 function changePassword(){alert("修改成功！");showLogin();}
 function logout(){localStorage.removeItem("loginStatus");showLogin();}
 
-// ==================== 空间核心功能 ====================
-function saveSpaceToCloud() {
-    localStorage.setItem("userFolders", JSON.stringify(folders));
-    localStorage.setItem("userFiles", JSON.stringify(files));
-    localStorage.setItem("currentFolder", currentFolder);
+function renderFolderPath(){
+    const el=document.getElementById("folderPath");el.innerHTML="";
+    folderPath.forEach((it,i)=>{
+        const d=document.createElement("div");d.className="path-item";d.innerText=it.name;
+        d.onclick=()=>{folderPath=folderPath.slice(0,i+1);currentFolderId=folderPath.at(-1).id;renderFolderPath();renderFolders();renderFiles();};
+        el.appendChild(d);
+        if(i<folderPath.length-1)el.appendChild(document.createTextNode(">"));
+    });
+}
+function renderFolders(){
+    const g=document.getElementById("folderGrid");g.innerHTML="";
+    const fs=folders.filter(f=>f.parent===currentFolderId);
+    fs.forEach(f=>{
+        const c=document.createElement("div");
+        c.className=`folder-card ${selectedItems.includes(f.id)?"selected":""}`;
+        c.innerHTML=`<div class="folder-icon">📁</div><div class="folder-name">${f.name}</div>`;
+        c.onclick=e=>e.ctrlKey?toggleSelect(f.id,"folder"):enterFolder(f);
+        g.appendChild(c);
+    });
+}
+function enterFolder(f){
+    folderPath.push({id:f.id,name:f.name});currentFolderId=f.id;selectedItems=[];
+    renderFolderPath();renderFolders();renderFiles();
 }
 
-// 渲染文件夹树
-function renderFolderTree() {
-    const tree = document.getElementById("folderTree");
-    tree.innerHTML = "";
-    const root = folders.filter(f => f.parent === null);
+function renderFiles(){
+    const g=document.getElementById("fileGrid");g.innerHTML="";
+    const fs=files.filter(f=>f.folderId===currentFolderId);
+    fs.forEach(f=>{
+        const c=document.createElement("div");
+        c.className=`file-card ${selectedItems.includes(f.id)?"selected":""}`;
+        let thumb = f.thumb || f.url;
+        c.innerHTML=`<img src="${thumb}" class="file-thumb"><div class="file-name">${f.name}</div>`;
+        c.onclick=e=>e.ctrlKey?toggleSelect(f.id,"file"):singleSelect(f.id,"file");
+        c.ondblclick=()=>previewFile(f);
+        g.appendChild(c);
+    });
+}
 
-    function render(folder) {
-        const div = document.createElement("div");
-        div.className = `folder-item ${folder.id === currentFolder ? "active" : ""}`;
-        div.innerHTML = `📁 ${folder.name}`;
-        div.onclick = () => {
-            currentFolder = folder.id;
-            saveSpaceToCloud();
-            renderFolderTree();
-            renderFiles();
+function singleSelect(id,t){
+    selectedItems=[id];t==="folder"?renderFolders():renderFiles();
+}
+function toggleSelect(id,t){
+    selectedItems=selectedItems.includes(id)?selectedItems.filter(i=>i!==id):[...selectedItems,id];
+    t==="folder"?renderFolders():renderFiles();
+}
+
+document.getElementById("selectAllBtn").onclick=()=>{
+    const fs=folders.filter(f=>f.parent===currentFolderId).map(f=>f.id);
+    const fl=files.filter(f=>f.folderId===currentFolderId).map(f=>f.id);
+    const all=[...fs,...fl];
+    selectedItems=selectedItems.length===all.length?[]:all;
+    renderFolders();renderFiles();
+};
+
+document.getElementById("newFolderBtn").onclick=async()=>{
+    const n=prompt("文件夹名称");if(!n)return;
+    const f={id:"f_"+Date.now(),name:n,parent:currentFolderId,time:Date.now()};
+    await saveData("folders",f);folders.push(f);renderFolders();
+};
+
+document.getElementById("renameBtn").onclick=async()=>{
+    if(selectedItems.length!==1)return alert("请选择一个项目重命名");
+    const id=selectedItems[0];
+    const f=folders.find(x=>x.id===id);
+    const fi=files.find(x=>x.id===id);
+    if(!f&&!fi)return;
+    const name=prompt("新名称",f?f.name:fi.name);
+    if(!name)return;
+    if(f){f.name=name;await saveData("folders",f);renderFolders();}
+    if(fi){fi.name=name;await saveData("files",fi);renderFiles();}
+};
+
+document.getElementById("moveBtn").onclick=()=>{
+    if(selectedItems.length<1)return alert("请选择要移动的文件/文件夹");
+    renderMoveFolderList();
+    document.getElementById("moveModal").style.display="flex";
+};
+function renderMoveFolderList(){
+    const el=document.getElementById("moveFolderList");el.innerHTML="";
+    const list=folders.filter(f=>f.id!=="root");
+    list.forEach(f=>{
+        const d=document.createElement("div");
+        d.className="move-folder";
+        d.innerText=f.name;
+        d.onclick=()=>{
+            document.querySelectorAll(".move-folder").forEach(x=>x.classList.remove("move-active"));
+            d.classList.add("move-active");
+            targetMoveFolderId=f.id;
         };
-        tree.appendChild(div);
-
-        const children = folders.filter(f => f.parent === folder.id);
-        if (children.length) {
-            const childWrap = document.createElement("div");
-            childWrap.className = "folder-child";
-            children.forEach(c => childWrap.appendChild(render(c)));
-            tree.appendChild(childWrap);
-        }
-        return div;
+        el.appendChild(d);
+    });
+}
+function closeMove(){
+    document.getElementById("moveModal").style.display="none";
+    targetMoveFolderId=null;
+}
+async function doMove(){
+    if(!targetMoveFolderId)return alert("请选择目标文件夹");
+    for(const id of selectedItems){
+        const f=folders.find(x=>x.id===id);
+        const fi=files.find(x=>x.id===id);
+        if(f){f.parent=targetMoveFolderId;await saveData("folders",f);}
+        if(fi){fi.folderId=targetMoveFolderId;await saveData("files",fi);}
     }
-    root.forEach(f => render(f));
+    await loadAllData();
+    renderFolders();renderFiles();
+    closeMove();
+    alert("移动成功");
 }
 
-// 渲染文件
-function renderFiles() {
-    const grid = document.getElementById("fileGrid");
-    grid.innerHTML = "";
-    const currFiles = files.filter(f => f.folderId === currentFolder);
-
-    currFiles.forEach(file => {
-        const card = document.createElement("div");
-        card.className = `file-card ${selectedFiles.includes(file.id) ? "selected" : ""}`;
-        card.innerHTML = `
-            <div class="file-icon">${file.type.startsWith("image") ? "🖼️" : "📄"}</div>
-            <div class="file-name">${file.name}</div>
-        `;
-        card.onclick = (e) => e.ctrlKey ? toggleSelect(file.id) : singleSelect(file.id);
-        card.ondblclick = () => previewFile(file);
-        grid.appendChild(card);
-    });
-}
-
-function singleSelect(id) { selectedFiles = [id]; renderFiles(); }
-function toggleSelect(id) {
-    selectedFiles = selectedFiles.includes(id)
-        ? selectedFiles.filter(i => i !== id)
-        : [...selectedFiles, id];
-    renderFiles();
-}
-
-// 全选/反选
-document.getElementById("selectAllBtn").onclick = () => {
-    const currFiles = files.filter(f => f.folderId === currentFolder).map(f => f.id);
-    selectedFiles = selectedFiles.length === currFiles.length ? [] : currFiles;
-    renderFiles();
-};
-
-// 新建文件夹
-document.getElementById("newFolderBtn").onclick = () => {
-    const name = prompt("输入文件夹名称");
-    if (!name) return;
-    folders.push({
-        id: "f" + Date.now(),
-        name,
-        parent: currentFolder
-    });
-    saveSpaceToCloud();
-    renderFolderTree();
-};
-
-// 上传文件
-const uploadInput = document.getElementById("fileUploadInput");
-document.getElementById("uploadBtn").onclick = () => uploadInput.click();
-uploadInput.onchange = (e) => {
-    const list = e.target.files;
-    if (!list.length) return;
-    for (let i = 0; i < list.length; i++) {
-        const f = list[i];
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-            files.push({
-                id: "file" + Date.now() + i,
-                name: f.name,
-                type: f.type,
-                url: ev.target.result,
-                folderId: currentFolder,
-                size: f.size
-            });
-            saveSpaceToCloud();
-            renderFiles();
+const uploadIn=document.getElementById("fileUploadInput");
+const progress=document.getElementById("uploadProgress");
+document.getElementById("uploadBtn").onclick=()=>uploadIn.click();
+uploadIn.onchange=async e=>{
+    const list=e.target.files;if(!list.length)return;
+    let total=list.length;let count=0;
+    for(const f of list){
+        const reader=new FileReader();
+        reader.onload=async ev=>{
+            let thumb=ev.target.result;
+            if(f.type.startsWith("video/")){
+                const v=document.createElement("video");v.src=thumb;
+                v.currentTime=1;v.muted=true;
+                await new Promise(r=>{v.onloadeddata=()=>{
+                    const c=document.createElement("canvas");c.width=320;c.height=180;
+                    c.getContext("2d").drawImage(v,0,0,320,180);
+                    thumb=c.toDataURL("image/jpeg");r();
+                };});
+            }
+            const file={
+                id:"fi_"+Date.now(),name:f.name,type:f.type,
+                url:ev.target.result,thumb:thumb,
+                folderId:currentFolderId,size:f.size,time:Date.now()
+            };
+            await saveData("files",file);files.push(file);
+            count++;progress.style.width=(count/total*100)+"%";
+            if(count===total){renderFiles();alert("上传完成");progress.style.width="0%";}
         };
         reader.readAsDataURL(f);
     }
-    alert("上传成功！已云端保存");
 };
 
-// 下载选中
-document.getElementById("downloadBtn").onclick = () => {
-    if (!selectedFiles.length) return alert("请选择文件");
-    selectedFiles.forEach(id => {
-        const f = files.find(x => x.id === id);
-        const a = document.createElement("a");
-        a.href = f.url;
-        a.download = f.name;
-        a.click();
+document.getElementById("downloadBtn").onclick=()=>{
+    selectedItems.forEach(id=>{
+        const f=files.find(x=>x.id===id);
+        if(f){const a=document.createElement("a");a.href=f.url;a.download=f.name;a.click();}
     });
 };
 
-// 删除选中
-document.getElementById("deleteBtn").onclick = () => {
-    if (!selectedFiles.length) return alert("请选择文件");
-    if (!confirm("确定删除？云端同步删除")) return;
-    files = files.filter(f => !selectedFiles.includes(f.id));
-    selectedFiles = [];
-    saveSpaceToCloud();
-    renderFiles();
+document.getElementById("deleteBtn").onclick=async()=>{
+    if(!selectedItems.length)return alert("请选择");
+    if(!confirm("确定删除？"))return;
+    for(const id of selectedItems){
+        const f=folders.find(x=>x.id===id);
+        if(f)await deleteFolderRecursive(id);
+        const fi=files.find(x=>x.id===id);
+        if(fi){await deleteData("files",id);files=files.filter(x=>x.id!==id);}
+    }
+    selectedItems=[];renderFolders();renderFiles();alert("删除成功");
 };
-
-// 文件预览 + 图片缩放
-let scale = 1;
-function previewFile(file) {
-    const modal = document.getElementById("previewModal");
-    const content = document.getElementById("previewContent");
-    content.innerHTML = "";
-    scale = 1;
-
-    if (file.type.startsWith("image")) {
-        const img = document.createElement("img");
-        img.className = "preview-img";
-        img.src = file.url;
-        img.style.transform = `scale(${scale})`;
-
-        img.onwheel = (e) => {
-            e.preventDefault();
-            scale += e.deltaY > 0 ? -0.1 : 0.1;
-            scale = Math.max(0.3, Math.min(3, scale));
-            img.style.transform = `scale(${scale})`;
-        };
-        img.onclick = () => {
-            scale = scale === 1 ? 2 : 1;
-            img.style.transform = `scale(${scale})`;
-        };
-        content.appendChild(img);
-    } else {
-        const txt = document.createElement("div");
-        txt.style.padding = "20px";
-        txt.innerText = `文件名：${file.name}\n大小：${(file.size/1024).toFixed(2)}KB`;
-        content.appendChild(txt);
-    }
-    modal.style.display = "flex";
-}
-document.getElementById("closePreview").onclick = () => {
-    document.getElementById("previewModal").style.display = "none";
-};
-
-window.onload=function(){
-    refreshCaptcha();refreshRegCaptcha();refreshFindCaptcha();refreshCpCaptcha();
-    if(localStorage.getItem("loginStatus")==="ok")showMain();else showLogin();
-
-    document.getElementById("avatarInput").onchange=function(e){
-        let f=new FileReader();
-        f.onload=ev=>{tempAvatar=ev.target.result;document.getElementById("settingAvatar").src=tempAvatar;}
-        f.readAsDataURL(e.target.files[0]);
-    }
-    document.getElementById("bgInput").onchange=function(e){
-        let f=new FileReader();
-        f.onload=ev=>{tempBg=ev.target.result;document.getElementById("bgPreview").src=tempBg;}
-        f.readAsDataURL(e.target.files[0]);
-    }
-}
-</script>
-</body>
-</html>
+async function deleteFolderRecursive(id){
+    const fs=files.filter(x=>x.folderId===id);
+    for(const f of fs){await deleteData("files",f.id);files=files.filter(x=>x.id!==
