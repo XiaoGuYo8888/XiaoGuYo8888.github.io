@@ -1,192 +1,294 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>XiaoGuYo</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif}
-body{background:#f8f8f8;color:#333}
-.page{display:none;width:100vw;height:100vh;align-items:center;justify-content:center;background:linear-gradient(135deg,#4263eb,#722ed1);padding:20px}
-#login{display:flex}
-.box{background:#fff;padding:40px 30px;border-radius:12px;width:100%;max-width:420px}
-.box h2{text-align:center;margin-bottom:30px}
-.form-item{margin-bottom:20px}
-.form-item label{display:block;margin-bottom:8px}
-.form-item input{width:100%;padding:12px;border:1px solid #ddd;border-radius:6px}
-.captcha-row{display:flex;gap:10px}
-#captcha-img{width:100px;height:44px;background:#f5f9fa;border:1px solid #ddd;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.row{display:flex;align-items:center;margin-bottom:15px}
-.btn{width:100%;padding:12px;background:#4263eb;color:#fff;border:none;border-radius:6px;font-size:16px;cursor:pointer}
-.link{text-align:center;margin-top:15px}
-.link a{color:#4263eb;cursor:pointer}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XiaoGuYo</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif}
+        body{background:#f8f8f8;color:#333;line-height:1.6}
+        .page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#4263eb,#722ed1);padding:20px}
+        .box{background:#fff;padding:40px 30px;border-radius:12px;width:100%;max-width:420px;box-shadow:0 10px 30px rgba(0,0,0,0.15)}
+        .box h2{text-align:center;margin-bottom:30px;color:#333}
+        .form-item{margin-bottom:20px}
+        .form-item label{display:block;margin-bottom:8px;font-size:14px}
+        .form-item input{width:100%;padding:12px 15px;border:1px solid #ddd;border-radius:6px;font-size:15px}
+        .captcha-row{display:flex;gap:10px}
+        .captcha-row input{flex:1}
+        #captcha-img,#reg-captcha-img,#find-captcha-img,#cp-captcha-img{width:100px;height:44px;background:#f5f9fa;border:1px solid #ddd;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer;letter-spacing:2px}
+        .row{display:flex;align-items:center;margin-bottom:15px;font-size:14px}
+        .btn{width:100%;padding:12px;background:#4263eb;color:#fff;border:none;border-radius:6px;font-size:16px;cursor:pointer;margin-bottom:10px}
+        .btn:disabled{background:#ccc;cursor:not-allowed}
+        .link{text-align:center;margin-top:15px;font-size:13px;color:#666}
+        .link a{color:#4263eb;cursor:pointer}
+        #register,#findPwd,#changePwd,#main,#settingsPage,#bgPage,#editAbout,#editWork,#spacePage{display:none}
+        .setting-item{padding:15px 0;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
+        .avatar-preview{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #4263eb}
+        .danger-btn{background:#f34144}
+        #main{width:100%;min-height:100vh;background:#fff;display:none;}
+        .pages{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+        .container.main{width:100%;max-width:1200px}
+        .row.home{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:40px}
+        .left,.right{flex:1;min-width:300px;display:flex;flex-direction:column;align-items:center}
+        .img-responsive{width:100%;max-width:450px;height:600px;object-fit:cover;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.1)}
+        .logo img{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid #eee;margin-bottom:10px}
+        .logo h4{font-size:24px;text-align:center}
+        .home-description{text-align:center;margin:15px 0 30px;font-size:16px;color:#666}
+        .btn-group-vertical{display:flex;flex-direction:column;gap:14px}
+        .btn-rabbit{background:#fff;border:2px solid #333;padding:14px 32px;border-radius:50px;font-size:16px;cursor:pointer;min-width:180px;text-align:center}
+        .btn-rabbit:hover{background:#333;color:#fff}
+        .back{margin-bottom:30px}
+        #watermark{position:relative;text-align:center;margin-bottom:20px}
+        .page-title{font-size:32px;font-weight:bold;text-align:center}
+        .marker{position:absolute;top:-25px;left:50%;transform:translateX(-50%);font-size:70px;color:rgba(0,0,0,0.05)}
+        .subtitle{text-align:center;font-size:17px;color:#777;margin-bottom:15px}
+        .info{text-align:center;font-size:16px;line-height:1.8;margin-bottom:10px}
+        .top-bar{position:fixed;top:20px;right:30px;display:flex;gap:10px;z-index:99}
+        .top-bar button{background:rgba(0,0,0,0.2);color:#fff;border:1px solid #fff;padding:8px 16px;border-radius:6px;cursor:pointer}
+        footer{background:#f8f8f8;padding:30px;text-align:center;color:#888}
+        .section{display:none}
+        #index_show{display:flex}
+        .edit-area{width:100%;min-height:160px;padding:15px;border:1px solid #ddd;border-radius:8px;font-size:16px;margin-bottom:20px;resize:vertical}
+        .edit-btn-group{display:flex;gap:12px}
+        .btn-save{flex:1;background:#4263eb;color:#fff;border-radius:8px}
+        .btn-cancel{flex:1;background:#6c757d;color:#fff;border-radius:8px}
+        .page-edit-btn{margin-top:25px;background:#6c757d;color:#fff;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-size:16px}
 
-#main{display:none;width:100%;min-height:100vh;background:#fff}
-.pages{display:flex;align-items:center;justify-content:center;padding:20px;height:100vh}
-.container{width:100%;max-width:1200px}
-.row.home{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:40px}
-.left,.right{flex:1;min-width:300px;display:flex;flex-direction:column;align-items:center}
-.img-responsive{width:100%;max-width:450px;height:600px;object-fit:cover;border-radius:12px}
-.logo img{width:110px;height:110px;border-radius:50%}
-.logo h4{font-size:24px;margin-top:10px}
-.home-description{margin:15px 0 30px}
-.btn-group-vertical{display:flex;flex-direction:column;gap:14px}
-.btn-rabbit{background:#fff;border:2px solid #333;padding:14px 32px;border-radius:50px;cursor:pointer;min-width:180px;text-align:center}
+        .space-box{max-width:800px}
+        .space-path{font-size:14px;color:#666;margin-bottom:10px}
+        .progress-info{font-size:12px;color:#333;margin-bottom:8px}
+        .space-toolbar{display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap}
+        .space-toolbar button{padding:8px 14px;border-radius:6px;border:none;cursor:pointer;font-size:14px}
+        .btn-primary{background:#4263eb;color:#fff}
+        .btn-danger{background:#f34144;color:#fff}
+        .btn-light{background:#f1f1f1;color:#333}
 
-.top-bar{position:fixed;top:20px;right:30px;display:flex;gap:10px}
-.top-bar button{background:rgba(0,0,0,0.2);color:#fff;border:1px solid #fff;padding:8px 16px;border-radius:6px;cursor:pointer}
-</style>
+        .space-content-wrapper {max-height:420px;overflow-y:auto;overflow-x:hidden;padding-right:4px;}
+        .folder-grid,.file-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;margin-bottom:20px;}
+        .folder-item{background:#f8f9fa;border-radius:10px;padding:15px 10px;text-align:center;cursor:pointer;border:2px solid transparent;position:relative}
+        .folder-item.selected{border-color:#4263eb}
+        .file-item{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:2px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f9f9f9;padding:6px;cursor:pointer}
+        .file-item.selected{border-color:#4263eb}
+        .file-item img{width:100%;height:60%;object-fit:cover;border-radius:4px}
+        .file-item .file-name{font-size:12px;text-align:center;word-break:break-all;margin-top:4px}
+        .check-item{position:absolute;top:6px;left:6px;width:18px;height:18px;accent-color:#4263eb;z-index:2}
+
+        .preview-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;display:none}
+        .preview-close{position:absolute;top:20px;right:20px;background:#fff;color:#000;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;z-index:10}
+        .preview-img{display:block;max-width:90vw;max-height:80vh;transform-origin:center center;cursor:grab}
+        .preview-text{background:#fff;padding:20px;border-radius:8px;max-width:90%;max-height:80vh;overflow-y:auto;white-space:pre-wrap;font-size:14px;color:#333}
+        .progress-container{width:100%;height:6px;background:#eee;border-radius:3px;margin:8px 0;overflow:hidden}
+        .progress-bar{height:100%;background:#4263eb;width:0%;transition:width 0.2s ease}
+
+        @media (max-width:768px){
+            .row.home{flex-direction:column;gap:20px}
+            .img-responsive{height:400px;max-width:100%}
+            .top-bar{position:relative;top:auto;right:auto;justify-content:center;margin:20px 0}
+            .logo img{width:90px;height:90px}
+            .folder-grid,.file-grid{grid-template-columns:repeat(3,1fr)}
+        }
+    </style>
 </head>
-
 <body>
 
+<div class="preview-modal" id="previewModal">
+    <div class="preview-close" onclick="closePreview()">×</div>
+    <div id="previewBody"></div>
+</div>
+
+<!-- 登录 -->
 <div id="login" class="page">
-  <div class="box">
-    <h2>登录</h2>
-    <div class="form-item">
-      <label>账号</label>
-      <input type="text" id="user" placeholder="账号">
+    <div class="box">
+        <h2>账号登录</h2>
+        <div class="form-item">
+            <label>用户名/手机号</label>
+            <input type="text" id="user" placeholder="请输入用户名/手机号">
+        </div>
+        <div class="form-item">
+            <label>密码</label>
+            <input type="password" id="pwd" placeholder="请输入密码">
+        </div>
+        <div class="form-item">
+            <label>验证码</label>
+            <div class="captcha-row">
+                <input type="text" id="loginCaptcha" placeholder="请输入验证码">
+                <div id="captcha-img" onclick="refreshCaptcha()"></div>
+            </div>
+        </div>
+        <div class="row">
+            <input type="checkbox" id="remember" checked>
+            <label for="remember">记住我（7天免登录）</label>
+        </div>
+        <button class="btn" onclick="login()">登录</button>
+        <div class="link">
+            <a onclick="showFindPwd()">忘记密码？</a> |
+            <a onclick="showChangePwd()">修改密码</a> |
+            没有账号？<a onclick="showRegister()">去注册</a>
+        </div>
     </div>
-    <div class="form-item">
-      <label>密码</label>
-      <input type="password" id="pwd" placeholder="密码">
-    </div>
-    <div class="form-item">
-      <label>验证码</label>
-      <div class="captcha-row">
-        <input type="text" id="code" placeholder="验证码">
-        <div id="captcha-img" onclick="refreshCode()"></div>
-      </div>
-    </div>
-    <div class="row">
-      <input type="checkbox" id="remember" checked>
-      <label for="remember">记住密码</label>
-    </div>
-    <button class="btn" onclick="doLogin()">登录</button>
-    <div class="link">
-      <a onclick="showFind()">找回密码</a> |
-      <a onclick="showReg()">注册</a>
-    </div>
-  </div>
 </div>
 
-<div id="register" class="page">
-  <div class="box">
-    <h2>注册</h2>
-    <div class="form-item"><label>账号</label><input type="text" id="reg_user"></div>
-    <div class="form-item"><label>密码</label><input type="password" id="reg_pwd"></div>
-    <button class="btn" onclick="alert('注册成功');showLogin()">注册</button>
-    <div class="link"><a onclick="showLogin()">返回登录</a></div>
-  </div>
-</div>
-
-<div id="findPwd" class="page">
-  <div class="box">
-    <h2>找回密码</h2>
-    <div class="form-item"><label>账号</label><input type="text"></div>
-    <button class="btn" onclick="alert('联系QQ：78190368');showLogin()">提交</button>
-    <div class="link"><a onclick="showLogin()">返回登录</a></div>
-  </div>
-</div>
-
+<!-- 主界面 -->
 <div id="main">
-  <div class="top-bar">
-    <button onclick="alert('设置开发中')">设置</button>
-    <button onclick="logout()">退出</button>
-  </div>
-  <div class="pages">
-    <div class="container">
-      <div class="row home">
-        <div class="left">
-          <img class="img-responsive" src="https://picsum.photos/id/1042/800/600">
-        </div>
-        <div class="right">
-          <div class="logo">
-            <img src="https://picsum.photos/id/64/200/200">
-            <h4>XiaoGuYo</h4>
-          </div>
-          <p class="home-description">热爱生活，记录美好</p>
-          <div class="btn-group-vertical">
-            <div class="btn-rabbit" onclick="showPage('about')">关于</div>
-            <div class="btn-rabbit" onclick="showPage('work')">经历</div>
-            <div class="btn-rabbit" onclick="showPage('space')">空间</div>
-            <div class="btn-rabbit" onclick="showPage('contact')">联系</div>
-          </div>
-        </div>
-      </div>
+    <div class="top-bar">
+        <button onclick="showSettings()">设置</button>
+        <button onclick="logout()">退出登录</button>
     </div>
-  </div>
 
-  <div id="about" style="display:none;text-align:center;padding:50px">
-    <h1>关于我</h1><p>我是XiaoGuYo</p>
-    <button class="btn" style="width:200px;margin-top:20px" onclick="showMain()">返回</button>
-  </div>
-  <div id="work" style="display:none;text-align:center;padding:50px">
-    <h1>我的经历</h1><p>正在努力成长</p>
-    <button class="btn" style="width:200px;margin-top:20px" onclick="showMain()">返回</button>
-  </div>
-  <div id="space" style="display:none;text-align:center;padding:50px">
-    <h1>空间</h1><p>功能开发中</p>
-    <button class="btn" style="width:200px;margin-top:20px" onclick="showMain()">返回</button>
-  </div>
-  <div id="contact" style="display:none;text-align:center;padding:50px">
-    <h1>联系我</h1><p>QQ：78190368</p>
-    <button class="btn" style="width:200px;margin-top:20px" onclick="showMain()">返回</button>
-  </div>
+    <div id="index_show" class="pages section">
+        <div class="container main">
+            <div class="row home">
+                <div class="left">
+                    <img class="img-responsive" id="mainBg" src="https://picsum.photos/id/1042/800/600">
+                </div>
+                <div class="right">
+                    <div class="logo">
+                        <img id="logoAvatar" src="https://picsum.photos/id/64/100/100">
+                        <h4 id="logoName">XiaoGuYo</h4>
+                    </div>
+                    <p class="home-description" id="logoSign">热爱生活 | 专注学习</p>
+                    <div class="btn-group-vertical">
+                        <div class="btn-rabbit" onclick="showAbout()">关于</div>
+                        <div class="btn-rabbit" onclick="showWork()">工作</div>
+                        <div class="btn-rabbit" onclick="showSpace()">空间</div>
+                        <div class="btn-rabbit" onclick="showContact()">联系</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="about" class="pages section">
+        <div class="container main">
+            <div class="row">
+                <div class="left">
+                    <img class="img-responsive" id="aboutBg" src="https://picsum.photos/id/1042/800/600">
+                </div>
+                <div class="right">
+                    <div class="btn-rabbit back" onclick="showIndex()">返回</div>
+                    <div id="watermark">
+                        <h2 class="page-title">关于我</h2>
+                        <div class="marker">X</div>
+                    </div>
+                    <p class="subtitle">XiaoGuYo · 简单生活，认真热爱</p>
+                    <div id="showAboutContent"></div>
+                    <button class="page-edit-btn" onclick="openEditAbout()">编辑关于内容</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="work" class="pages section">
+        <div class="container main">
+            <div class="row">
+                <div class="left">
+                    <img class="img-responsive" id="workBg" src="https://picsum.photos/id/1042/800/600">
+                </div>
+                <div class="right">
+                    <div class="btn-rabbit back" onclick="showIndex()">返回</div>
+                    <div id="watermark">
+                        <h2 class="page-title">我的经历</h2>
+                        <div class="marker">X</div>
+                    </div>
+                    <div id="showWorkContent"></div>
+                    <button class="page-edit-btn" onclick="openEditWork()">编辑经历内容</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="contact" class="pages section">
+        <div class="container main">
+            <div class="row">
+                <div class="left">
+                    <img class="img-responsive" id="contactBg" src="https://picsum.photos/id/1042/800/600">
+                </div>
+                <div class="right">
+                    <div class="btn-rabbit back" onclick="showIndex()">返回</div>
+                    <div id="watermark">
+                        <h2 class="page-title">联系我</h2>
+                        <div class="marker">X</div>
+                    </div>
+                    <p class="subtitle">有问题随时联系我！</p>
+                    <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=78190368&site=qq&menu=yes">
+                        <img src="http://wpa.qq.com/pa?p=2:78190368:53" alt="联系我">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>© 2026 XiaoGuYo</footer>
 </div>
 
 <script>
-let code = "";
-function refreshCode(){
-  code = Math.random().toString(36).slice(2,6).toUpperCase();
-  document.getElementById("captcha-img").innerText = code;
+let currentCaptcha = "";
+function genCode(){
+    const s = "ABCDEFGHJKLMNPQRSTWXYZ23456789";
+    let c = "";
+    for(let i=0;i<4;i++) c += s[Math.floor(Math.random()*s.length)];
+    return c;
+}
+function refreshCaptcha(){
+    currentCaptcha = genCode();
+    document.getElementById("captcha-img").innerText = currentCaptcha;
 }
 
-function showLogin(){
-  document.querySelectorAll(".page").forEach(p=>p.style.display="none");
-  document.getElementById("login").style.display="flex";
-}
-function showReg(){
-  document.querySelectorAll(".page").forEach(p=>p.style.display="none");
-  document.getElementById("register").style.display="flex";
-}
-function showFind(){
-  document.querySelectorAll(".page").forEach(p=>p.style.display="none");
-  document.getElementById("findPwd").style.display="flex";
+function hideAll() {
+    document.querySelectorAll(".page").forEach(p => p.style.display = "none");
+    document.querySelectorAll(".section").forEach(s => s.style.display = "none");
 }
 
-function showMain(){
-  document.querySelectorAll(".page").forEach(p=>p.style.display="none");
-  document.getElementById("main").style.display="block";
-  document.querySelectorAll("#about,#work,#space,#contact").forEach(e=>e.style.display="none");
+function showIndex() {
+    hideAll();
+    document.getElementById("main").style.display = "block";
+    document.getElementById("index_show").style.display = "flex";
 }
-function showPage(id){
-  document.querySelectorAll("#about,#work,#space,#contact").forEach(e=>e.style.display="none");
-  document.getElementById(id).style.display="block";
+function showAbout() { hideAll(); document.getElementById("main").style.display = "block"; document.getElementById("about").style.display = "flex"; }
+function showWork() { hideAll(); document.getElementById("main").style.display = "block"; document.getElementById("work").style.display = "flex"; }
+function showSpace() { hideAll(); document.getElementById("spacePage").style.display = "flex"; }
+function showContact() { hideAll(); document.getElementById("main").style.display = "block"; document.getElementById("contact").style.display = "flex"; }
+function showSettings() { hideAll(); document.getElementById("settingsPage").style.display = "flex"; }
+function showLogin() { hideAll(); document.getElementById("login").style.display = "flex"; }
+
+// ✅ 修复登录跳转（核心！）
+function login() {
+    const u = document.getElementById("user").value.trim();
+    const p = document.getElementById("pwd").value.trim();
+    const c = document.getElementById("loginCaptcha").value.trim().toUpperCase();
+
+    if (!u || !p || !c) {
+        alert("请填写完整");
+        return;
+    }
+    if (c !== currentCaptcha) {
+        alert("验证码错误");
+        refreshCaptcha();
+        return;
+    }
+    if (u === "78190368" && p === "mawei1@.") {
+        localStorage.setItem("loginStatus", "ok");
+        showIndex(); // ✅ 直接跳转主页，不刷新
+    } else {
+        alert("账号或密码错误");
+        refreshCaptcha();
+    }
 }
 
-function doLogin(){
-  const u = document.getElementById("user").value;
-  const p = document.getElementById("pwd").value;
-  const c = document.getElementById("code").value.toUpperCase();
-  if(!u||!p||!c){alert("请填写完整");return}
-  if(c!==code){alert("验证码错误");return}
-  if(u!=="78190368" || p!=="mawei1@."){alert("账号或密码错误");return}
-  localStorage.setItem("logined","1");
-  showMain();
+function logout() {
+    localStorage.removeItem("loginStatus");
+    showLogin();
 }
 
-function logout(){
-  localStorage.clear();
-  location.reload();
-}
-
-window.onload = function(){
-  refreshCode();
-  if(localStorage.getItem("logined")==="1"){
-    showMain();
-  }
-}
+// 初始化
+window.onload = function () {
+    refreshCaptcha();
+    if (localStorage.getItem("loginStatus") === "ok") {
+        showIndex();
+    } else {
+        showLogin();
+    }
+};
 </script>
 </body>
 </html>
