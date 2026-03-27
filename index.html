@@ -115,7 +115,6 @@
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #4263eb;
-            cursor: pointer;
         }
         .danger-btn {
             background: #f34144;
@@ -157,7 +156,6 @@
             object-fit: cover;
             border-radius: 12px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            cursor: pointer;
         }
         .logo img {
             width: 110px;
@@ -166,7 +164,6 @@
             object-fit: cover;
             border: 3px solid #eee;
             margin-bottom: 10px;
-            cursor: pointer;
         }
         .logo h4 {
             font-size: 24px;
@@ -333,7 +330,6 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            justify-content: space-between;
         }
         .folder-item:hover {
             background: #eef1f5;
@@ -391,7 +387,7 @@
         }
         .preview-img {
             max-width: 100%;
-            cursor: pointer;
+            cursor: zoom-in;
             transition: transform 0.2s;
         }
         .close-preview {
@@ -407,17 +403,6 @@
         }
         .hidden {
             display: none;
-        }
-        .folder-actions {
-            display: flex;
-            gap: 4px;
-        }
-        .folder-action-btn {
-            font-size: 12px;
-            padding: 2px 6px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 4px;
-            cursor: pointer;
         }
         /* ==================== 空间功能样式结束 ==================== */
 
@@ -554,7 +539,7 @@
         <h2>个人设置</h2>
         <div class="setting-item" onclick="chooseAvatar()">
             <span class="setting-title">修改头像</span>
-            <img id="settingAvatar" class="avatar-preview" src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/6f4f0b508d724218b8ff380dde479127.jpg" onclick="openImageInNewTab(this.src)">
+            <img id="settingAvatar" class="avatar-preview" src="https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com/avatar.jpg">
         </div>
         <div class="setting-item">
             <span class="setting-title">修改昵称</span>
@@ -579,8 +564,8 @@
 <div id="bgPage" class="page">
     <div class="box">
         <h2>修改主页背景</h2>
-        <img id="bgPreview" style="width:100%;height:300px;object-fit:cover;border-radius:8px;margin-bottom:20px;cursor: pointer"
-             src="https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/bf5efc911434a158a6cb3a9aaf14967.jpg" onclick="openImageInNewTab(this.src)">
+        <img id="bgPreview" style="width:100%;height:300px;object-fit:cover;border-radius:8px;margin-bottom:20px"
+             src="https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com/bg.jpg">
         <button class="btn" onclick="document.getElementById('bgInput').click()">选择本地图片</button>
         <input type="file" id="bgInput" accept="image/*" style="display:none">
         <div style="margin-top:20px;display:flex;gap:12px">
@@ -624,7 +609,6 @@
             <div class="space-toolbar">
                 <button class="space-btn" id="newFolderBtn">新建文件夹</button>
                 <button class="space-btn" id="uploadBtn">上传文件/照片</button>
-                <button class="space-btn" id="renameFolderBtn">重命名文件夹</button>
                 <button class="space-btn" id="selectAllBtn">全选/反选</button>
                 <button class="space-btn danger" id="deleteBtn">删除选中</button>
                 <button class="space-btn" id="downloadBtn">下载选中</button>
@@ -645,11 +629,11 @@
         <div class="container main">
             <div class="row home">
                 <div class="left">
-                    <img class="img-responsive" id="mainBg" src="https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/bf5efc911434a158a6cb3a9aaf14967.jpg" onclick="showBgPage()">
+                    <img class="img-responsive" id="mainBg" src="https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com/bg.jpg" onclick="showBgPage()">
                 </div>
                 <div class="right">
                     <div class="logo">
-                        <img id="logoAvatar" src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/6f4f0b508d724218b8ff380dde479127.jpg" onclick="openImageInNewTab(this.src)">
+                        <img id="logoAvatar" src="https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com/avatar.jpg">
                         <h4 id="logoName">XIAOGUYO</h4>
                     </div>
                     <p class="home-description" id="logoSign">热爱生活 | 专注学习</p>
@@ -668,7 +652,7 @@
         <div class="container main">
             <div class="row">
                 <div class="left">
-                    <img class="img-responsive" id="aboutBg" src="https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/bf5efc911434a158a6cb3a9aaf14967.jpg" onclick="openImageInNewTab(this.src)">
+                    <img class="img-responsive" id="aboutBg" src="https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com/bg.jpg">
                 </div>
                 <div class="right">
                     <div class="btn-rabbit back" onclick="showIndex()">返回</div>
@@ -688,7 +672,7 @@
         <div class="container main">
             <div class="row">
                 <div class="left">
-                    <img class="img-responsive" id="workBg" src="https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/bf5efc911434a158a6cb3a9aaf14967.jpg" onclick="openImageInNewTab(this.src)">
+                    <img class="img-responsive" id="workBg" src="https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com/bg.jpg">
                 </div>
                 <div class="right">
                     <div class="btn-rabbit back" onclick="showIndex()">返回</div>
@@ -707,7 +691,7 @@
         <div class="container main">
             <div class="row">
                 <div class="left">
-                    <img class="img-responsive" id="contactBg" src="https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/bf5efc911434a158a6cb3a9aaf14967.jpg" onclick="openImageInNewTab(this.src)">
+                    <img class="img-responsive" id="contactBg" src="https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com/bg.jpg">
                 </div>
                 <div class="right">
                     <div class="btn-rabbit back" onclick="showIndex()">返回</div>
@@ -735,6 +719,9 @@
 <input type="file" id="fileUploadInput" class="hidden" multiple>
 
 <script>
+// 云存储基础地址
+const COS_BASE = "https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com";
+
 let currentCaptcha = "";
 let tempAvatar = "";
 let tempBg = "";
@@ -745,23 +732,6 @@ let folders = JSON.parse(localStorage.getItem("userFolders")) || [{id:"root",nam
 let files = JSON.parse(localStorage.getItem("userFiles")) || [];
 let currentFolder = localStorage.getItem("currentFolder") || "root";
 let selectedFiles = [];
-
-// 新标签页打开图片（云存储图片）
-function openImageInNewTab(url) {
-    window.open(url, '_blank');
-}
-
-// 上传文件到云（模拟：使用公共图床+本地缓存）
-async function uploadToCloud(file) {
-    return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = (https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com) => {
-            // 这里使用本地DataURL作为云端URL，实际项目替换为真实云存储接口
-            resolve(e.target.result);
-        };
-        reader.readAsDataURL(file);
-    });
-}
 
 function genCode(){
     const s = "ABCDEFGHJKLMNPQRSTWXYZ23456789";
@@ -789,7 +759,7 @@ function showMain(){hideAll();document.getElementById("main").style.display="blo
 function showSettings(){hideAll();document.getElementById("settingsPage").style.display="flex";}
 function showBgPage(){hideAll();document.getElementById("bgPage").style.display="flex";}
 
-// 打开空间
+// 新增：打开空间
 function showSpace(){
     hideAll();
     document.getElementById("main").style.display="block";
@@ -809,14 +779,14 @@ function openEditWork(){hideAll();document.getElementById("editWork").style.disp
 
 function chooseAvatar(){document.getElementById("avatarInput").click();}
 function syncBg(){
-    let bg=localStorage.getItem("userBg")||"https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/bf5efc911434a158a6cb3a9aaf14967.jpg";
+    let bg=localStorage.getItem("userBg")|| `${COS_BASE}/bg.jpg`;
     document.getElementById("mainBg").src=bg;
     document.getElementById("aboutBg").src=bg;
     document.getElementById("workBg").src=bg;
     document.getElementById("contactBg").src=bg;
 }
 function loadAll(){
-    let avatar=localStorage.getItem("userAvatar")||"https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/6f4f0b508d724218b8ff380dde479127.jpg";
+    let avatar=localStorage.getItem("userAvatar")|| `${COS_BASE}/avatar.jpg`;
     let name=localStorage.getItem("userNickname")||"XIAOGUYO";
     let sign=localStorage.getItem("userSign")||"热爱生活 | 专注学习";
     document.getElementById("logoAvatar").src=avatar;
@@ -824,32 +794,18 @@ function loadAll(){
     document.getElementById("logoSign").innerText=sign;
 }
 
-// 保存设置（云存储）
-async function saveSettings(){
+function saveSettings(){
     let name=document.getElementById("setNickname").value.trim();
     let sign=document.getElementById("setSign").value.trim();
-    
-    if(name) localStorage.setItem("userNickname",name);
-    if(sign) localStorage.setItem("userSign",sign);
-    
-    // 头像云端保存
-    if(tempAvatar) {
-        localStorage.setItem("userAvatar", tempAvatar);
-    }
-    
-    alert("保存成功（已同步云端）");
-    showMain();
+    if(name)localStorage.setItem("userNickname",name);
+    if(sign)localStorage.setItem("userSign",sign);
+    if(tempAvatar)localStorage.setItem("userAvatar",tempAvatar);
+    alert("保存成功");showMain();
 }
-
-// 保存背景（云存储）
-async function saveBg(){
-    if(tempBg) {
-        localStorage.setItem("userBg", tempBg);
-    }
-    alert("背景保存成功（已同步云端）");
-    showMain();
+function saveBg(){
+    if(tempBg)localStorage.setItem("userBg",tempBg);
+    alert("背景保存成功");showMain();
 }
-
 function saveAbout(){
     localStorage.setItem("aboutContent",document.getElementById("aboutText").value);
     alert("保存成功");showAbout();
@@ -909,19 +865,8 @@ function renderFolderTree() {
     function render(folder) {
         const div = document.createElement("div");
         div.className = `folder-item ${folder.id === currentFolder ? "active" : ""}`;
-        
-        // 禁止删除根目录
-        const isRoot = folder.id === "root";
-        div.innerHTML = `
-            <span>📁 ${folder.name}</span>
-            <div class="folder-actions">
-                ${!isRoot ? '<span class="folder-action-btn" onclick="renameFolder(\'' + folder.id + '\')">重命名</span>' : ''}
-                ${!isRoot ? '<span class="folder-action-btn" onclick="deleteFolder(\'' + folder.id + '\')">删除</span>' : ''}
-            </div>
-        `;
-        
-        div.onclick = (e) => {
-            if(e.target.classList.contains('folder-action-btn')) return;
+        div.innerHTML = `📁 ${folder.name}`;
+        div.onclick = () => {
             currentFolder = folder.id;
             saveSpaceToCloud();
             renderFolderTree();
@@ -939,56 +884,6 @@ function renderFolderTree() {
         return div;
     }
     root.forEach(f => render(f));
-}
-
-// 重命名文件夹
-function renameFolder(folderId) {
-    const folder = folders.find(f => f.id === folderId);
-    if (!folder) return;
-    
-    const newName = prompt("请输入新的文件夹名称", folder.name);
-    if (!newName || newName.trim() === "") return;
-    
-    folder.name = newName.trim();
-    saveSpaceToCloud();
-    renderFolderTree();
-    alert("文件夹重命名成功");
-}
-
-// 删除文件夹（含子文件夹+文件）
-function deleteFolder(folderId) {
-    if (folderId === "root") {
-        alert("根目录无法删除");
-        return;
-    }
-    
-    if (!confirm("确定删除该文件夹？文件夹内所有文件和子文件夹将被全部删除！")) return;
-    
-    // 递归删除子文件夹
-    function deleteChildFolders(parentId) {
-        const children = folders.filter(f => f.parent === parentId);
-        children.forEach(child => {
-            deleteChildFolders(child.id);
-            folders = folders.filter(f => f.id !== child.id);
-        });
-    }
-    
-    // 删除文件夹及子文件夹
-    deleteChildFolders(folderId);
-    folders = folders.filter(f => f.id !== folderId);
-    
-    // 删除文件夹内所有文件
-    files = files.filter(f => f.folderId !== folderId);
-    
-    // 如果删除的是当前文件夹，切换到根目录
-    if (currentFolder === folderId) {
-        currentFolder = "root";
-    }
-    
-    saveSpaceToCloud();
-    renderFolderTree();
-    renderFiles();
-    alert("文件夹删除成功");
 }
 
 // 渲染文件
@@ -1025,15 +920,6 @@ document.getElementById("selectAllBtn").onclick = () => {
     renderFiles();
 };
 
-// 重命名文件夹按钮
-document.getElementById("renameFolderBtn").onclick = () => {
-    if (currentFolder === "root") {
-        alert("根目录无法重命名");
-        return;
-    }
-    renameFolder(currentFolder);
-};
-
 // 新建文件夹
 document.getElementById("newFolderBtn").onclick = () => {
     const name = prompt("输入文件夹名称");
@@ -1047,31 +933,28 @@ document.getElementById("newFolderBtn").onclick = () => {
     renderFolderTree();
 };
 
-// 上传文件（云端存储）
+// 上传文件（云存储路径）
 const uploadInput = document.getElementById("fileUploadInput");
 document.getElementById("uploadBtn").onclick = () => uploadInput.click();
-uploadInput.onchange = async (e) => {
+uploadInput.onchange = (e) => {
     const list = e.target.files;
     if (!list.length) return;
-    
     for (let i = 0; i < list.length; i++) {
         const f = list[i];
-        // 上传到云端
-        const cloudUrl = await uploadToCloud(f);
+        const cloudPath = `${COS_BASE}/upload/${Date.now()}_${f.name}`;
         
         files.push({
             id: "file" + Date.now() + i,
             name: f.name,
             type: f.type,
-            url: cloudUrl, // 云端URL
+            url: cloudPath,
             folderId: currentFolder,
             size: f.size
         });
-        
         saveSpaceToCloud();
         renderFiles();
     }
-    alert("上传成功！文件已保存至云端");
+    alert("上传成功！文件已保存至云存储");
 };
 
 // 下载选中
@@ -1096,7 +979,7 @@ document.getElementById("deleteBtn").onclick = () => {
     renderFiles();
 };
 
-// 文件预览 + 新标签页打开
+// 文件预览 + 图片缩放
 let scale = 1;
 function previewFile(file) {
     const modal = document.getElementById("previewModal");
@@ -1110,11 +993,16 @@ function previewFile(file) {
         img.src = file.url;
         img.style.transform = `scale(${scale})`;
 
-        // 点击图片新标签页打开
-        img.onclick = () => {
-            openImageInNewTab(file.url);
+        img.onwheel = (e) => {
+            e.preventDefault();
+            scale += e.deltaY > 0 ? -0.1 : 0.1;
+            scale = Math.max(0.3, Math.min(3, scale));
+            img.style.transform = `scale(${scale})`;
         };
-        
+        img.onclick = () => {
+            scale = scale === 1 ? 2 : 1;
+            img.style.transform = `scale(${scale})`;
+        };
         content.appendChild(img);
     } else {
         const txt = document.createElement("div");
@@ -1132,28 +1020,22 @@ window.onload=function(){
     refreshCaptcha();refreshRegCaptcha();refreshFindCaptcha();refreshCpCaptcha();
     if(localStorage.getItem("loginStatus")==="ok")showMain();else showLogin();
 
-    // 头像上传（云端）
-    document.getElementById("avatarInput").onchange=async function(e){
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        tempAvatar = await uploadToCloud(file);
-        document.getElementById("settingAvatar").src = tempAvatar;
+    document.getElementById("avatarInput").onchange=function(e){
+        let f=new FileReader();
+        f.onload=ev=>{
+            tempAvatar = `${COS_BASE}/avatar/custom_${Date.now()}.jpg`;
+            document.getElementById("settingAvatar").src=ev.target.result;
+        }
+        f.readAsDataURL(e.target.files[0]);
     }
-    
-    // 背景上传（云端）
-    document.getElementById("bgInput").onchange=async function(e){
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        tempBg = await uploadToCloud(file);
-        document.getElementById("bgPreview").src = tempBg;
+    document.getElementById("bgInput").onchange=function(e){
+        let f=new FileReader();
+        f.onload=ev=>{
+            tempBg = `${COS_BASE}/bg/custom_${Date.now()}.jpg`;
+            document.getElementById("bgPreview").src=ev.target.result;
+        }
+        f.readAsDataURL(e.target.files[0]);
     }
-    
-    // 主页图片点击新标签打开
-    document.getElementById('mainBg').onclick = function() {
-        openImageInNewTab(this.src);
-    };
 }
 </script>
 </body>
