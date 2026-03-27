@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIAOGUYO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background: #f8f8f8;
+            color: #333;
+            line-height: 1.6;
+        }
+        .page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4263eb, #722ed1);
+            padding: 20px;
+        }
+        .box {
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .box h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .form-item {
+            margin-bottom: 20px;
+        }
+        .form-item label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .form-item input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+        .captcha-row {
+            display: flex;
+            gap: 10px;
+        }
+        .captcha-row input {
+            flex: 1;
+        }
+        #captcha-img,#reg-captcha-img,#find-captcha-img,#cp-captcha-img {
+            width: 100px;
+            height: 44px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            letter-spacing: 2px;
+        }
+        .row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #4263eb;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #666;
+        }
+        .link a {
+            color: #4263eb;
+            cursor: pointer;
+        }
+        #register,#findPwd,#changePwd,#main,#settingsPage,#bgPage,#editAbout,#editWork,#spacePage {
+            display: none;
+        }
+        .setting-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .avatar-preview {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #4263eb;
+        }
+        .danger-btn {
+            background: #f34144;
+        }
+        #main {
+            width: 100%;
+            min-height: 100vh;
+            background: #fff;
+        }
+        .pages {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container.main {
+            width: 100%;
+            max-width: 1200px;
+        }
+        .row.home {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+        }
+        .left,.right {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .img-responsive {
+            width: 100%;
+            max-width: 450px;
+            height: 600px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .logo img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #eee;
+            margin-bottom: 10px;
+        }
+        .logo h4 {
+            font-size: 24px;
+            text-align: center;
+        }
+        .home-description {
+            text-align: center;
+            margin: 15 0 30px;
+            font-size: 16px;
+            color: #666;
+        }
+        .btn-group-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .btn-rabbit {
+            background: #fff;
+            border: 2px solid #333;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            min-width: 180px;
+            text-align: center;
+        }
+        .btn-rabbit:hover {
+            background: #333;
+            color: #fff;
+        }
+        .back {
+            margin-bottom: 30px;
+        }
+        #watermark {
+            position: relative;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .page-title {
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .marker {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 70px;
+            color: rgba(0,0,0,0.05);
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 17px;
+            color: #777;
+            margin-bottom: 15px;
+        }
+        .info {
+            text-align: center;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+        .top-bar {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 99;
+        }
+        .top-bar button {
+            background: rgba(0,0,0,0.2);
+            color: #fff;
+            border: 1px solid #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        footer {
+            background: #f8f8f8;
+            padding: 30px;
+            text-align: center;
+            color: #888;
+        }
+        .section {
+            display: none;
+        }
+        #index_show {
+            display: flex;
+        }
+        .edit-area {
+            width: 100%;
+            min-height: 160px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .edit-btn-group {
+            display: flex;
+            gap: 12px;
+        }
+        .btn-save {
+            flex: 1;
+            background: #4263eb;
+            color: #fff;
+            border-radius: 8px;
+        }
+        .btn-cancel {
+            flex: 1;
+            background: #6c757d;
+            color: #fff;
+            border-radius: 8px;
+        }
+        .page-edit-btn {
+            margin-top: 25px;
+            background: #6c757d;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .space-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .space-toolbar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .space-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            background: #4263eb;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .space-btn.danger {
+            background: #f34144;
+        }
+        .folder-tree {
+            background: #f7f8fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .folder-item {
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .folder-item:hover {
+            background: #eef1f5;
+        }
+        .folder-item.active {
+            background: #4263eb;
+            color: white;
+        }
+        .folder-child {
+            margin-left: 24px;
+        }
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+        }
+        .file-card {
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 12px;
+            background: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            text-align: center;
+            cursor: pointer;
+        }
+        .file-card.selected {
+            border-color: #4263eb;
+            background: #f0f4ff;
+        }
+        .file-icon {
+            font-size: 36px;
+            margin-bottom: 6px;
+        }
+        .file-name {
+            font-size: 13px;
+            word-break: break-all;
+        }
+        .preview-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        .preview-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            overflow: auto;
+        }
+        .preview-img {
+            max-width: 100%;
+            cursor: zoom-in;
+            transition: transform 0.2s;
+        }
+        .close-preview {
+            position: absolute;
+            top: 15px; right: 15px;
+            width: 40px; height: 40px;
+            background: #f34144;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .hidden { display: none; }
+        @media (max-width:768px){
+            .row.home{flex-direction:column;}
+            .img-responsive{height:450px;}
+            .top-bar{position:relative;justify-content:center;margin-bottom:20px;}
+        }
+    </style>
+</head>
+<body>
+
+<script src="https://cdn.jsdelivr.net/npm/cos-js-sdk-v5/dist/cos.min.js"></script>
+
+<div id="login" class="page">
+    <div class="box">
+        <h2>账号登录</h2>
+        <div class="form-item">
+            <label>用户名/手机号</label>
+            <input type="text" id="user" placeholder="请输入用户名/手机号">
+        </div>
+        <div class="form-item">
+            <label>密码</label>
+            <input type="password" id="pwd" placeholder="请输入密码">
+        </div>
+        <div class="form-item">
+            <label>验证码</label>
+            <div class="captcha-row">
+                <input type="text" id="loginCaptcha" placeholder="请输入验证码">
+                <div id="captcha-img" onclick="refreshCaptcha()"></div>
+            </div>
+        </div>
+        <div class="row">
+            <input type="checkbox" id="remember" checked>
+            <label for="remember">记住我（7天免登录）</label>
+        </div>
+        <button class="btn" onclick="login()">登录</button>
+        <div class="link">
+            <a onclick="showFindPwd()">忘记密码？</a> |
+            <a onclick="showChangePwd()">修改密码</a> |
+            没有账号？<a onclick="showRegister()">去注册</a>
+        </div>
+    </div>
+</div>
+
+<div id="register" class="page">
+    <div class="box">
+        <h2>用户注册</h2>
+        <div class="form-item">
+            <label>用户名</label>
+            <input type="text" id="reg_user" placeholder="请设置用户名">
+        </div>
+        <div class="form-item">
+            <label>手机号</label>
+            <input type="text" id="reg_phone" placeholder="请输入手机号">
+        </div>
+        <div class="form-item">
+            <label>短信验证码</label>
+            <div class="captcha-row">
+                <input type="text" id="smsCode" placeholder="请输入短信验证码">
+                <button class="btn" style="width:110px" onclick="sendSms()">发送</button>
+            </div>
+        </div>
+        <div class="form-item">
+            <label>密码</label>
+            <input type="password" id="reg_pwd" placeholder="请设置密码">
+        </div>
+        <div class="form-item">
+            <label>验证码</label>
+            <div class="captcha-row">
+                <input type="text" id="regCaptcha" placeholder="请输入验证码">
+                <div id="reg-captcha-img" onclick="refreshRegCaptcha()"></div>
+            </div>
+        </div>
+        <button class="btn" onclick="register()">注册</button>
+        <div class="link">已有账号？<a onclick="showLogin()">返回登录</a></div>
+    </div>
+</div>
+
+<div id="findPwd" class="page">
+    <div class="box">
+        <h2>找回密码</h2>
+        <div class="form-item">
+            <label>用户名/手机号</label>
+            <input type="text" id="find_user" placeholder="请输入注册的账号">
+        </div>
+        <div class="form-item">
+            <label>验证码</label>
+            <div class="captcha-row">
+                <input type="text" id="findCaptcha" placeholder="请输入验证码">
+                <div id="find-captcha-img" onclick="refreshFindCaptcha()"></div>
+            </div>
+        </div>
+        <button class="btn" onclick="findPassword()">找回密码</button>
+        <div class="link"><a onclick="showLogin()">返回登录</a></div>
+    </div>
+</div>
+
+<div id="changePwd" class="page">
+    <div class="box">
+        <h2>修改密码</h2>
+        <div class="form-item">
+            <label>用户名/手机号</label>
+            <input type="text" id="cp_user" placeholder="请输入账号">
+        </div>
+        <div class="form-item">
+            <label>旧密码</label>
+            <input type="password" id="cp_old" placeholder="请输入旧密码">
+        </div>
+        <div class="form-item">
+            <label>新密码</label>
+            <input type="password" id="cp_new" placeholder="请输入新密码">
+        </div>
+        <div class="form-item">
+            <label>验证码</label>
+            <div class="captcha-row">
+                <input type="text" id="cpCaptcha" placeholder="请输入验证码">
+                <div id="cp-captcha-img" onclick="refreshCpCaptcha()"></div>
+            </div>
+        </div>
+        <button class="btn" onclick="changePassword()">确认修改</button>
+        <div class="link"><a onclick="showLogin()">返回登录</a></div>
+    </div>
+</div>
+
+<div id="settingsPage" class="page">
+    <div class="box">
+        <h2>个人设置</h2>
+        <div class="setting-item" onclick="chooseAvatar()">
+            <span class="setting-title">修改头像</span>
+            <img id="settingAvatar" class="avatar-preview" src="https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com/avatar.jpg">
+        </div>
+        <div class="setting-item">
+            <span class="setting-title">修改昵称</span>
+            <input type="text" id="setNickname" placeholder="请输入昵称" style="width:160px">
+        </div>
+        <div class="setting-item">
+            <span class="setting-title">修改签名</span>
+            <input type="text" id="setSign" placeholder="请输入个性签名" style="width:160px">
+        </div>
+        <div class="setting-item">
+            <span class="setting-title">清空数据</span>
+            <button class="btn danger-btn" style="padding:6px 12px" onclick="clearAllData()">清空</button>
+        </div>
+        <input type="file" id="avatarInput" accept="image/*" style="display:none">
+        <div style="margin-top:20px;display:flex;gap:10px">
+            <button class="btn" style="flex:1" onclick="saveSettings()">保存</button>
+            <button class="btn" style="flex:1;background:#6c757d" onclick="showMain()">返回</button>
+        </div>
+    </div>
+</div>
+
+<div id="bgPage" class="page">
+    <div class="box">
+        <h2>修改主页背景</h2>
+        <img id="bgPreview" style="width:100%;height:300px;object-fit:cover;border-radius:8px;margin-bottom:20px"
+             src="https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com/bg.jpg">
+        <button class="btn" onclick="document.getElementById('bgInput').click()">选择本地图片</button>
+        <input type="file" id="bgInput" accept="image/*" style="display:none">
+        <div style="margin-top:20px;display:flex;gap:12px">
+            <button class="btn btn-save" onclick="saveBg()">保存背景</button>
+            <button class="btn btn-cancel" onclick="showMain()">取消</button>
+        </div>
+    </div>
+</div>
+
+<div id="editAbout" class="page">
+    <div class="box">
+        <h2>编辑关于我</h2>
+        <textarea id="aboutText" class="edit-area"></textarea>
+        <div class="edit-btn-group">
+            <button class="btn btn-save" onclick="saveAbout()">保存</button>
+            <button class="btn btn-cancel" onclick="showAbout()">取消</button>
+        </div>
+    </div>
+</div>
+
+<div id="editWork" class="page">
+    <div class="box">
+        <h2>编辑我的经历</h2>
+        <textarea id="workText" class="edit-area"></textarea>
+        <div class="edit-btn-group">
+            <button class="btn btn-save" onclick="saveWork()">保存</button>
+            <button class="btn btn-cancel" onclick="showWork()">取消</button>
+        </div>
+    </div>
+</div>
+
+<div id="spacePage" class="pages section">
+    <div class="container main">
+        <div class="space-container">
+            <div class="btn-rabbit back" onclick="showIndex()">返回主页</div>
+            <div id="watermark">
+                <h2 class="page-title">我的空间</h2>
+                <div class="marker">X</div>
+            </div>
+            <div class="space-toolbar">
+                <button class="space-btn" id="newFolderBtn">新建文件夹</button>
+                <button class="space-btn" id="uploadBtn">上传文件/照片</button>
+                <button class="space-btn" id="selectAllBtn">全选/反选</button>
+                <button class="space-btn danger" id="deleteBtn">删除选中</button>
+                <button class="space-btn" id="downloadBtn">下载选中</button>
+            </div>
+            <div class="folder-tree" id="folderTree"></div>
+            <div class="file-grid" id="fileGrid"></div>
+        </div>
+    </div>
+</div>
+
+<div id="main">
+    <div class="top-bar">
+        <button onclick="showSettings()">设置</button>
+        <button onclick="logout()">退出登录</button>
+    </div>
+    <div id="index_show" class="pages section">
+        <div class="container main">
+            <div class="row home">
+                <div class="left">
+                    <img class="img-responsive" id="mainBg" src="https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com/bg.jpg" onclick="showBgPage()">
+                </div>
+                <div class="right">
+                    <div class="logo">
+                        <img id="logoAvatar" src="https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com/avatar.jpg">
+                        <h4 id="logoName">XIAOGUYO</h4>
+                    </div>
+                    <p class="home-description" id="logoSign">热爱生活 | 专注学习</p>
+                    <div class="btn-group-vertical">
+                        <div class="btn-rabbit" onclick="showAbout()">关于</div>
+                        <div class="btn-rabbit" onclick="showWork()">工作</div>
+                        <div class="btn-rabbit" onclick="showSpace()">空间</div>
+                        <div class="btn-rabbit" onclick="showContact()">联系</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="about" class="pages section">
+        <div class="container main">
+            <div class="row">
+                <div class="left">
+                    <img class="img-responsive" id="aboutBg" src="https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com/bg.jpg">
+                </div>
+                <div class="right">
+                    <div class="btn-rabbit back" onclick="showIndex()">返回</div>
+                    <div id="watermark">
+                        <h2 class="page-title">关于我</h2>
+                        <div class="marker">X</div>
+                    </div>
+                    <p class="subtitle">XIAOGUYO - Jag-8 · 简单生活，认真热爱</p>
+                    <div id="showAboutContent"></div>
+                    <button class="page-edit-btn" onclick="openEditAbout()">编辑关于内容</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="work" class="pages section">
+        <div class="container main">
+            <div class="row">
+                <div class="left">
+                    <img class="img-responsive" id="workBg" src="https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com/bg.jpg">
+                </div>
+                <div class="right">
+                    <div class="btn-rabbit back" onclick="showIndex()">返回</div>
+                    <div id="watermark">
+                        <h2 class="page-title">我的经历</h2>
+                        <div class="marker">X</div>
+                    </div>
+                    <div id="showWorkContent"></div>
+                    <button class="page-edit-btn" onclick="openEditWork()">编辑经历内容</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="contact" class="pages section">
+        <div class="container main">
+            <div class="row">
+                <div class="left">
+                    <img class="img-responsive" id="contactBg" src="https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com/bg.jpg">
+                </div>
+                <div class="right">
+                    <div class="btn-rabbit back" onclick="showIndex()">返回</div>
+                    <div id="watermark">
+                        <h2 class="page-title">联系我</h2>
+                        <div class="marker">X</div>
+                    </div>
+                    <p class="subtitle">有问题随时联系我！</p>
+                    <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=78190368&site=qq&menu=yes">
+                        <img src="http://wpa.qq.com/pa?p=2:78190368:53" alt="联系我">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>© 2026 XIAOGUYO · Jag-8</footer>
+</div>
+
+<div class="preview-modal" id="previewModal">
+    <button class="close-preview" id="closePreview">×</button>
+    <div class="preview-content" id="previewContent"></div>
+</div>
+<input type="file" id="fileUploadInput" class="hidden" multiple>
+
+<script>
+const COS_CONFIG = {
+  SecretId: "AKIDKctykKp8GBhAVikcMxNk0875udEfx76u",
+  SecretKey: "jIfpocJrESXTEwZ4OYW9mHbjeR2gGsY9",
+  Bucket: "jig-8-1416238546",
+  Region: "ap-guangzhou",
+  BaseUrl: "https://jig-8-1416238546.cos.ap-guangzhou.myqcloud.com"
+};
+
+const cos = new COS({ SecretId: COS_CONFIG.SecretId, SecretKey: COS_CONFIG.SecretKey });
+
+let currentCaptcha = "";
+let tempAvatar = "";
+let tempBg = "";
+let smsSent = false;
+let folders = JSON.parse(localStorage.getItem("userFolders")) || [{id:"root",name:"根目录",parent:null}];
+let files = JSON.parse(localStorage.getItem("userFiles")) || [];
+let currentFolder = localStorage.getItem("currentFolder") || "root";
+let selectedFiles = [];
+
+function genCode(){const s="ABCDEFGHJKLMNPQRSTWXYZ23456789";let c="";for(let i=0;i<4;i++)c+=s[Math.floor(Math.random()*s.length)];return c;}
+function refreshCaptcha(){currentCaptcha=genCode();document.getElementById("captcha-img").innerText=currentCaptcha;}
+function refreshRegCaptcha(){document.getElementById("reg-captcha-img").innerText=genCode();}
+function refreshFindCaptcha(){document.getElementById("find-captcha-img").innerText=genCode();}
+function refreshCpCaptcha(){document.getElementById("cp-captcha-img").innerText=genCode();}
+function sendSms(){let phone=document.getElementById("reg_phone").value.trim();if(!phone){alert("请输入手机号");return;}smsSent=true;alert("验证码：1234");}
+
+function hideAll(){document.querySelectorAll(".page").forEach(e=>e.style.display="none");}
+function showLogin(){hideAll();document.getElementById("login").style.display="flex";document.getElementById("main").style.display="none";}
+function showRegister(){hideAll();document.getElementById("register").style.display="flex";document.getElementById("main").style.display="none";}
+function showFindPwd(){hideAll();document.getElementById("findPwd").style.display="flex";document.getElementById("main").style.display="none";}
+function showChangePwd(){hideAll();document.getElementById("changePwd").style.display="flex";document.getElementById("main").style.display="none";}
+function showMain(){hideAll();document.getElementById("main").style.display="block";showIndex();loadAll();syncBg();}
+function showSettings(){hideAll();document.getElementById("settingsPage").style.display="flex";}
+function showBgPage(){hideAll();document.getElementById("bgPage").style.display="flex";}
+function showSpace(){hideAll();document.getElementById("main").style.display="block";document.querySelectorAll(".section").forEach(s=>s.style.display="none");document.getElementById("spacePage").style.display="flex";renderFolderTree();renderFiles();}
+function showIndex(){document.querySelectorAll(".section").forEach(s=>s.style.display="none");document.getElementById("index_show").style.display="flex";}
+function showAbout(){hideAll();document.getElementById("main").style.display="block";document.querySelectorAll(".section").forEach(s=>s.style.display="none");document.getElementById("about").style.display="flex";renderAbout();}
+function showWork(){hideAll();document.getElementById("main").style.display="block";document.querySelectorAll(".section").forEach(s=>s.style.display="none");document.getElementById("work").style.display="flex";renderWork();}
+function showContact(){hideAll();document.getElementById("main").style.display="block";document.querySelectorAll(".section").forEach(s=>s.style.display="none");document.getElementById("contact").style.display="flex";}
+
+function openEditAbout(){hideAll();document.getElementById("editAbout").style.display="flex";document.getElementById("aboutText").value=localStorage.getItem("aboutContent")||"我是一名热爱生活、热爱记录的普通人。\n保持热爱，慢慢变好。";}
+function openEditWork(){hideAll();document.getElementById("editWork").style.display="flex";document.getElementById("workText").value=localStorage.getItem("workContent")||"专注于自己喜欢的事情，一步一个脚印。\n保持学习，保持成长。\n未来可期，继续前行。";}
+
+function chooseAvatar(){document.getElementById("avatarInput").click();}
+function syncBg(){let bg=localStorage.getItem("userBg")||`${COS_CONFIG.BaseUrl}/bg.jpg`;document.getElementById("mainBg").src=bg;document.getElementById("aboutBg").src=bg;document.getElementById("workBg").src=bg;document.getElementById("contactBg").src=bg;}
+function loadAll(){let avatar=localStorage.getItem("userAvatar")||`${COS_CONFIG.BaseUrl}/avatar.jpg`;let name=localStorage.getItem("userNickname")||"XIAOGUYO";let sign=localStorage.getItem("userSign")||"热爱生活 | 专注学习";document.getElementById("logoAvatar").src=avatar;document.getElementById("logoName").innerText=name;document.getElementById("logoSign").innerText=sign;}
+
+function saveSettings(){let name=document.getElementById("setNickname").value.trim();let sign=document.getElementById("setSign").value.trim();if(name)localStorage.setItem("userNickname",name);if(sign)localStorage.setItem("userSign",sign);if(tempAvatar)localStorage.setItem("userAvatar",tempAvatar);alert("保存成功");showMain();}
+function saveBg(){if(tempBg)localStorage.setItem("userBg",tempBg);alert("背景保存成功");showMain();}
+function saveAbout(){localStorage.setItem("aboutContent",document.getElementById("aboutText").value);alert("保存成功");showAbout();}
+function saveWork(){localStorage.setItem("workContent",document.getElementById("workText").value);alert("保存成功");showWork();}
+function renderAbout(){let c=localStorage.getItem("aboutContent")||"我是一名热爱生活、热爱记录的普通人。\n保持热爱，慢慢变好。";document.getElementById("showAboutContent").innerHTML=c.split("\n").map(t=>t.trim()?`<p class="info">${t}</p>`:"").join("");}
+function renderWork(){let c=localStorage.getItem("workContent")||"专注于自己喜欢的事情，一步一个脚印。\n保持学习，保持成长。\n未来可期，继续前行。";document.getElementById("showWorkContent").innerHTML=c.split("\n").map(t=>t.trim()?`<p class="info">${t}</p>`:"").join("");}
+function clearAllData(){if(!confirm("确定清空所有数据？空间文件也会删除"))return;localStorage.clear();alert("已清空");location.reload();}
+
+function login(){let u=document.getElementById("user").value.trim();let p=document.getElementById("pwd").value.trim();let c=document.getElementById("loginCaptcha").value.toUpperCase().trim();if(!u||!p||!c){alert("请填写完整");return;}if(c!==currentCaptcha){alert("验证码错误");refreshCaptcha();return;}if(u==="78190368"&&p==="dashan1@."){if(document.getElementById("remember").checked)localStorage.setItem("loginStatus","ok");showMain();}else{alert("账号或密码错误");}}
+function register(){alert("注册成功！");showLogin();}
+function findPassword(){alert("请联系管理员");showLogin();}
+function changePassword(){alert("修改成功！");showLogin();}
+function logout(){localStorage.removeItem("loginStatus");showLogin();}
+
+function saveSpaceToCloud() {
+  localStorage.setItem("userFolders", JSON.stringify(folders));
+  localStorage.setItem("userFiles", JSON.stringify(files));
+  localStorage.setItem("currentFolder", currentFolder);
+}
+
+function renderFolderTree() {
+  const tree = document.getElementById("folderTree");tree.innerHTML="";const root=folders.filter(f=>f.parent===null);
+  function render(folder){const div=document.createElement("div");div.className=`folder-item ${folder.id===currentFolder?"active":""}`;div.innerHTML=`📁 ${folder.name}`;div.onclick=()=>{currentFolder=folder.id;saveSpaceToCloud();renderFolderTree();renderFiles();};tree.appendChild(div);const children=folders.filter(f=>f.parent===folder.id);if(children.length){const childWrap=document.createElement("div");childWrap.className="folder-child";children.forEach(c=>childWrap.appendChild(render(c)));tree.appendChild(childWrap);}return div;}
+  root.forEach(f=>render(f));
+}
+
+function renderFiles() {
+  const grid=document.getElementById("fileGrid");grid.innerHTML="";const currFiles=files.filter(f=>f.folderId===currentFolder);
+  currFiles.forEach(file=>{const card=document.createElement("div");card.className=`file-card ${selectedFiles.includes(file.id)?"selected":""}`;card.innerHTML=`<div class="file-icon">${file.type.startsWith("image")?"🖼️":"📄"}</div><div class="file-name">${file.name}</div>`;card.onclick=(e)=>e.ctrlKey?toggleSelect(file.id):singleSelect(file.id);card.ondblclick=()=>previewFile(file);grid.appendChild(card);});
+}
+
+function singleSelect(id){selectedFiles=[id];renderFiles();}
+function toggleSelect(id){selectedFiles=selectedFiles.includes(id)?selectedFiles.filter(i=>i!==id):[...selectedFiles,id];renderFiles();}
+document.getElementById("selectAllBtn").onclick=()=>{const currFiles=files.filter(f=>f.folderId===currentFolder).map(f=>f.id);selectedFiles=selectedFiles.length===currFiles.length?[]:currFiles;renderFiles();};
+document.getElementById("newFolderBtn").onclick=()=>{const name=prompt("输入文件夹名称");if(!name)return;folders.push({id:"f"+Date.now(),name,parent:currentFolder});saveSpaceToCloud();renderFolderTree();};
+
+const uploadInput = document.getElementById("fileUploadInput");
+document.getElementById("uploadBtn").onclick = () => uploadInput.click();
+uploadInput.onchange = async (e) => {
+  const fileList = e.target.files;
+  if (!fileList.length) return;
+
+  for (let i = 0; i < fileList.length; i++) {
+    const file = fileList[i];
+    const cloudKey = `upload/${Date.now()}_${file.name}`;
+
+    try {
+      const data = await cos.putObject({
+        Bucket: COS_CONFIG.Bucket,
+        Region: COS_CONFIG.Region,
+        Key: cloudKey,
+        Body: file
+      });
+
+      const cloudUrl = `https://${data.Location}`;
+      files.push({
+        id: "file" + Date.now() + i,
+        name: file.name,
+        type: file.type,
+        url: cloudUrl,
+        folderId: currentFolder,
+        size: file.size
+      });
+
+      saveSpaceToCloud();
+      renderFiles();
+      alert(`上传成功！\n云地址：${cloudUrl}`);
+    } catch (err) {
+      console.error(err);
+      alert("上传失败：请检查COS跨域已开启");
+    }
+  }
+};
+
+document.getElementById("avatarInput").onchange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const key = `avatar/custom_${Date.now()}.jpg`;
+  cos.putObject({
+    Bucket: COS_CONFIG.Bucket, Region: COS_CONFIG.Region, Key: key, Body: file
+  }, (err, data) => {
+    if (err) return alert("头像上传失败");
+    tempAvatar = `https://${data.Location}`;
+    document.getElementById("settingAvatar").src = tempAvatar;
+  });
+};
+
+document.getElementById("bgInput").onchange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const key = `bg/custom_${Date.now()}.jpg`;
+  cos.putObject({
+    Bucket: COS_CONFIG.Bucket, Region: COS_CONFIG.Region, Key: key, Body: file
+  }, (err, data) => {
+    if (err) return alert("背景上传失败");
+    tempBg = `https://${data.Location}`;
+    document.getElementById("bgPreview").src = tempBg;
+  });
+};
+
+document.getElementById("downloadBtn").onclick = () => {
+  if (!selectedFiles.length) return alert("请选择文件");
+  selectedFiles.forEach(id => {
+    const f = files.find(x => x.id === id);
+    const a = document.createElement("a");
+    a.href = f.url;
+    a.download = f.name;
+    a.click();
+  });
+};
+
+document.getElementById("deleteBtn").onclick = () => {
+  if (!selectedFiles.length) return alert("请选择文件");
+  if (!confirm("确定删除？")) return;
+  files = files.filter(f => !selectedFiles.includes(f.id));
+  selectedFiles = [];
+  saveSpaceToCloud();
+  renderFiles();
+};
+
+let scale = 1;
+function previewFile(file) {
+  const modal = document.getElementById("previewModal");
+  const content = document.getElementById("previewContent");
+  content.innerHTML = ""; scale = 1;
+  if (file.type.startsWith("image")) {
+    const img = document.createElement("img");
+    img.className = "preview-img";
+    img.src = file.url;
+    img.style.transform = `scale(${scale})`;
+    img.onwheel = (e) => {
+      e.preventDefault();
+      scale += e.deltaY > 0 ? -0.1 : 0.1;
+      scale = Math.max(0.3, Math.min(3, scale));
+      img.style.transform = `scale(${scale})`;
+    };
+    img.onclick = () => {
+      scale = scale === 1 ? 2 : 1;
+      img.style.transform = `scale(${scale})`;
+    };
+    content.appendChild(img);
+  } else {
+    const txt = document.createElement("div");
+    txt.style.padding = "20px";
+    txt.innerText = `文件名：${file.name}\n大小：${(file.size/1024).toFixed(2)}KB`;
+    content.appendChild(txt);
+  }
+  modal.style.display = "flex";
+}
+document.getElementById("closePreview").onclick = () => {
+  document.getElementById("previewModal").style.display = "none";
+};
+
+// ✅ 修复：页面打开自动显示验证码
+window.onload=function(){
+  refreshCaptcha();
+  refreshRegCaptcha();
+  refreshFindCaptcha();
+  refreshCpCaptcha();
+  
+  if(localStorage.getItem("loginStatus")==="ok"){
+    showMain();
+  }else{
+    showLogin();
+  }
+}
+</script>
+</body>
+</html>
