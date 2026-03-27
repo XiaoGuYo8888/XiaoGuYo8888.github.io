@@ -171,7 +171,7 @@
         }
         .home-description {
             text-align: center;
-            margin: 15 0 30px;
+            margin: 15px 0 30px;
             font-size: 16px;
             color: #666;
         }
@@ -740,8 +740,8 @@ function showAbout(){hideAll();document.getElementById("main").style.display="bl
 function showWork(){hideAll();document.getElementById("main").style.display="block";document.querySelectorAll(".section").forEach(s=>s.style.display="none");document.getElementById("work").style.display="flex";renderWork();}
 function showContact(){hideAll();document.getElementById("main").style.display="block";document.querySelectorAll(".section").forEach(s=>s.style.display="none");document.getElementById("contact").style.display="flex";}
 
-function openEditAbout(){hideAll();document.getElementById("editAbout").style.display="flex";document.getElementById("aboutText").value=localStorage.getItem("aboutContent")||"我是一名热爱生活、热爱记录的普通人。\n保持热爱，慢慢变好。";}
-function openEditWork(){hideAll();document.getElementById("editWork").style.display="flex";document.getElementById("workText").value=localStorage.getItem("workContent")||"专注于自己喜欢的事情，一步一个脚印。\n保持学习，保持成长。\n未来可期，继续前行。";}
+function openEditAbout(){hideAll();document.getElementById("editAbout").style.display="flex";document.getElementById("aboutText").value=localStorage.getItem("aboutContent")||"我是一名热爱生活、热爱记录的普通人。\\n保持热爱，慢慢变好。";}
+function openEditWork(){hideAll();document.getElementById("editWork").style.display="flex";document.getElementById("workText").value=localStorage.getItem("workContent")||"专注于自己喜欢的事情，一步一个脚印。\\n保持学习，保持成长。\\n未来可期，继续前行。";}
 
 function chooseAvatar(){document.getElementById("avatarInput").click();}
 function syncBg(){let bg=localStorage.getItem("userBg")||`${COS_CONFIG.BaseUrl}/bg.jpg`;document.getElementById("mainBg").src=bg;document.getElementById("aboutBg").src=bg;document.getElementById("workBg").src=bg;document.getElementById("contactBg").src=bg;}
@@ -751,8 +751,8 @@ function saveSettings(){let name=document.getElementById("setNickname").value.tr
 function saveBg(){if(tempBg)localStorage.setItem("userBg",tempBg);alert("背景保存成功");showMain();}
 function saveAbout(){localStorage.setItem("aboutContent",document.getElementById("aboutText").value);alert("保存成功");showAbout();}
 function saveWork(){localStorage.setItem("workContent",document.getElementById("workText").value);alert("保存成功");showWork();}
-function renderAbout(){let c=localStorage.getItem("aboutContent")||"我是一名热爱生活、热爱记录的普通人。\n保持热爱，慢慢变好。";document.getElementById("showAboutContent").innerHTML=c.split("\n").map(t=>t.trim()?`<p class="info">${t}</p>`:"").join("");}
-function renderWork(){let c=localStorage.getItem("workContent")||"专注于自己喜欢的事情，一步一个脚印。\n保持学习，保持成长。\n未来可期，继续前行。";document.getElementById("showWorkContent").innerHTML=c.split("\n").map(t=>t.trim()?`<p class="info">${t}</p>`:"").join("");}
+function renderAbout(){let c=localStorage.getItem("aboutContent")||"我是一名热爱生活、热爱记录的普通人。\\n保持热爱，慢慢变好。";document.getElementById("showAboutContent").innerHTML=c.split("\\n").map(t=>t.trim()?`<p class="info">${t}</p>`:"").join("");}
+function renderWork(){let c=localStorage.getItem("workContent")||"专注于自己喜欢的事情，一步一个脚印。\\n保持学习，保持成长。\\n未来可期，继续前行。";document.getElementById("showWorkContent").innerHTML=c.split("\\n").map(t=>t.trim()?`<p class="info">${t}</p>`:"").join("");}
 function clearAllData(){if(!confirm("确定清空所有数据？空间文件也会删除"))return;localStorage.clear();alert("已清空");location.reload();}
 
 function login(){let u=document.getElementById("user").value.trim();let p=document.getElementById("pwd").value.trim();let c=document.getElementById("loginCaptcha").value.toUpperCase().trim();if(!u||!p||!c){alert("请填写完整");return;}if(c!==currentCaptcha){alert("验证码错误");refreshCaptcha();return;}if(u==="78190368"&&p==="dashan1@."){if(document.getElementById("remember").checked)localStorage.setItem("loginStatus","ok");showMain();}else{alert("账号或密码错误");}}
@@ -900,18 +900,9 @@ document.getElementById("closePreview").onclick = () => {
   document.getElementById("previewModal").style.display = "none";
 };
 
-// ✅ 修复：页面打开自动显示验证码
 window.onload=function(){
-  refreshCaptcha();
-  refreshRegCaptcha();
-  refreshFindCaptcha();
-  refreshCpCaptcha();
-  
-  if(localStorage.getItem("loginStatus")==="ok"){
-    showMain();
-  }else{
-    showLogin();
-  }
+  refreshCaptcha();refreshRegCaptcha();refreshFindCaptcha();refreshCpCaptcha();
+  if(localStorage.getItem("loginStatus")==="ok")showMain();else showLogin();
 }
 </script>
 </body>
